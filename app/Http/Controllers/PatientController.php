@@ -18,7 +18,7 @@ class PatientController extends Controller
 
         // Retorna a coleção formatada 
         return PatientResource::collection($patients);
-        
+
     }
 
     /**
@@ -32,9 +32,14 @@ class PatientController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $patientId)
     {
-        //
+        // Usa where('patient_id', ...) para buscar pelo código único de 6 dígitos.
+        // firstOrFail() garante que se não for encontrado, ele retorne um 404.
+        $patient = Patient::where('patient_id', $patientId)->firstOrFail();
+
+        // Retorna o paciente encontrado, formatado pelo Resource
+        return new PatientResource($patient);
     }
 
     /**
