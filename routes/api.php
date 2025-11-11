@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PatientController; 
+use App\Http\Controllers\QuestionnaireController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -17,3 +18,5 @@ Route::get('/status', function () {
 });
 
 Route::apiResource('patients', PatientController::class);
+// NOVO: Rota para o recurso Questionnaires
+Route::apiResource('questionnaires', QuestionnaireController::class); // <-- ADICIONEIESTA LINHA
