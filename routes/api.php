@@ -20,3 +20,6 @@ Route::get('/status', function () {
 Route::apiResource('patients', PatientController::class);
 // NOVO: Rota para o recurso Questionnaires
 Route::apiResource('questionnaires', QuestionnaireController::class); // <-- ADICIONEIESTA LINHA
+// Rota para buscar um questionário pelo seu código
+// Ex: GET /api/questionnaires/code/BDI-II
+Route::get('questionnaires/code/{code}', [QuestionnaireController::class, 'showByCode']);
