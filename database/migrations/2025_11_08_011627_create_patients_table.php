@@ -12,18 +12,38 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('patients', function (Blueprint $table) {
-            // Chave primária padrão (PK)
-            $table->id();
 
-            // ID ÚNICO DO PACIENTE (Código de 6 dígitos, letras/números maiúsculos)
-            $table->string('patient_id', 6)->unique();
+        // Campos Originais
+        // Chave primária padrão (PK)
+        $table->id();
+        // ID ÚNICO DO PACIENTE (Código de 6 dígitos, letras/números maiúsculos)
+        $table->string('patient_code', 6)->unique();
+        $table->string('full_name');
+        $table->date('birth_date');
 
-            // Dados do Paciente
-            $table->string('full_name');
-            $table->date('birth_date');
+        // NOVOS CAMPOS ADICIONADOS (com base na sua lista)
+        $table->string('gender')->nullable();
+        $table->string('cpf', 11)->nullable();
+        $table->string('marital_status')->nullable();
+        
+        $table->string('nationality')->nullable();
+        $table->string('birth_city')->nullable();
+        $table->string('profession')->nullable();
+        $table->string('current_occupation')->nullable();
 
-            // Timestamps
-            $table->timestamps();
+        $table->unsignedSmallInteger('birth_order')->nullable();
+        $table->unsignedSmallInteger('family_members')->nullable();
+        $table->boolean('has_addiction')->default(false);
+        $table->text('addiction_details')->nullable();
+
+        $table->string('socioeconomic_level')->nullable();
+        $table->string('education_level')->nullable();
+
+        $table->text('referral_reason')->nullable();
+        $table->string('referred_by')->nullable();
+
+        // Timestamps
+        $table->timestamps();
         });
     }
 

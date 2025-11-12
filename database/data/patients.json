@@ -1,0 +1,43 @@
+[
+    {
+        "patient_id": "P-A001",
+        "full_name": "Ana Clara Ribeiro",
+        "birth_date": "1995-03-15",
+        "gender": "Feminino",
+        "cpf": "11122233344",
+        "marital_status": "Solteiro",
+        "nationality": "Brasileira",
+        "birth_city": "São Paulo",
+        "profession": "Psicóloga",
+        "current_occupation": "Autônoma",
+        "birth_order": 2,
+        "family_members": 4,
+        "has_addiction": false,
+        "addiction_details": null,
+        "socioeconomic_level": "B",
+        "education_level": "Superior Completo",
+        "referral_reason": "Ansiedade e estresse",
+        "referred_by": "Dr. Carlos Silva"
+    },
+    {
+        "patient_id": "P-B002",
+        "full_name": "Bruno Alves Ferreira",
+        "birth_date": "1980-11-20",
+        "gender": "Masculino",
+        "cpf": "55566677788",
+        "marital_status": "Casado",
+        "nationality": "Brasileira",
+        "birth_city": "Rio de Janeiro",
+        "profession": "Engenheiro",
+        "current_occupation": "Engenheiro",
+        "birth_order": 1,
+        "family_members": 3,
+        "has_addiction": true,
+        "addiction_details": "Tabagismo",
+        "socioeconomic_level": "A",
+        "education_level": "Pós-graduado",
+        "referral_reason": "Terapia de casal",
+        "referred_by": "Esposa"
+    }
+    // ... adicione mais pacientes
+]
