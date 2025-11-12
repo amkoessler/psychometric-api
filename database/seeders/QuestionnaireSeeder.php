@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Questionnaire;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class QuestionnaireSeeder extends Seeder
 {
@@ -17,7 +16,10 @@ class QuestionnaireSeeder extends Seeder
         $questionnaires = $this->getStaticQuestionnaireData();
 
         foreach ($questionnaires as $data) {
-            Questionnaire::create($data);
+            Questionnaire::updateOrCreate( 
+                ['code' => $data['code']], // Condição de busca (chave única)
+                $data  );
+
         }
     }
 
@@ -114,8 +116,8 @@ class QuestionnaireSeeder extends Seeder
             // [11/10] EXCEL - Questionário IFP
             [
                 'code' => 'IFP',
-                'title' => 'Questionario IFP Temática (TAT)',
-                'description' => 'Questionário IFDP (EXCEL).',
+                'title' => 'Questionario IFP',
+                'description' => 'Questionário IFP (EXCEL).',
                 'edition' => 'Versão 1',
                 'is_active' => true, 
             ],
