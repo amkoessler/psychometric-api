@@ -11,7 +11,7 @@ class Patient extends Model
 
     // Opcional, mas recomendado: Defender contra atribuição em massa
     protected $fillable = [
-        'patient_id',
+        'patient_code   ',
         'full_name',
         'birth_date',
     ];

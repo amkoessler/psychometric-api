@@ -32,11 +32,11 @@ class PatientController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $patientId)
+    public function show(string $patientCode)
     {
         // Usa where('patient_id', ...) para buscar pelo código único de 6 dígitos.
         // firstOrFail() garante que se não for encontrado, ele retorne um 404.
-        $patient = Patient::where('patient_id', $patientId)->firstOrFail();
+        $patient = Patient::where('patient_code', $patientCode)->firstOrFail();
 
         // Retorna o paciente encontrado, formatado pelo Resource
         return new PatientResource($patient);

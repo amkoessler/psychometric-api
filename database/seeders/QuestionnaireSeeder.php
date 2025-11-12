@@ -111,6 +111,14 @@ class QuestionnaireSeeder extends Seeder
                 'edition' => 'Versão Original',
                 'is_active' => false, // Exemplo de teste não ativo
             ],
+            // [11/10] EXCEL - Questionário IFP
+            [
+                'code' => 'IFP',
+                'title' => 'Questionario IFP Temática (TAT)',
+                'description' => 'Questionário IFDP (EXCEL).',
+                'edition' => 'Versão 1',
+                'is_active' => true, 
+            ],
         ];
     }
 }
