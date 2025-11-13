@@ -114,13 +114,11 @@ class QuestionnaireSeeder extends Seeder
                 'is_active' => false, // Exemplo de teste não ativo
             ],
             // [11/10] EXCEL - Questionário IFP
-            [
                 'code' => 'IFP',
-                'title' => 'Questionario IFP',
-                'description' => 'Questionário IFP (EXCEL).',
-                'edition' => 'Versão 1',
+                'title' => 'Inventário Fatorial de Personalidade ',
+                'description' => 'Mede 15 necessidades psicológicas e 3 escalas de validade.',
+                'edition' => '2020',
                 'is_active' => true, 
-            ],
         ];
     }
 }

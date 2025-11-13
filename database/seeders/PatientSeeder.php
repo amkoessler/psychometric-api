@@ -456,6 +456,27 @@ class PatientSeeder extends Seeder
                 'referral_reason' => 'Triagem de desenvolvimento', // Ajustado
                 'referred_by' => 'Pediatra' // Ajustado
             ],
+            // [20/20] Pedro Souza (6 meses - Bebê) - ALTERADO
+            [
+                'patient_code' => 'El11AW', // CÓDIGO ALEATÓRIO MAIÚSCULO
+                'full_name' => 'Isabelle Klarkson',
+                'birth_date' => '2012-10-05',
+                'gender' => 'Faminino',
+                'cpf' => '02547236517',
+                'marital_status' => 'Solteiro',
+                'nationality' => 'Canadense',
+                'birth_city' => 'Rome',
+                'profession' => 'Diretora Cinematográfica', // Ajustado
+                'current_occupation' => 'Diretora Cinematográfica', // Ajustado
+                'birth_order' => 1,
+                'family_members' => 3,
+                'has_addiction' => false,
+                'addiction_details' => null,
+                'socioeconomic_level' => 'A+',
+                'education_level' => 'Pós-Graduda', // Ajustado
+                'referral_reason' => 'Dra. Fátima', // Ajustado
+                'referred_by' => 'Philadelphie Hospital' // Ajustado
+            ],
         ];
     }
 }
