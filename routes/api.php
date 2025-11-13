@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\QuestionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PatientController; 
@@ -23,3 +24,5 @@ Route::apiResource('questionnaires', QuestionnaireController::class); // <-- ADI
 // Rota para buscar um questionário pelo seu código
 // Ex: GET /api/questionnaires/code/BDI-II
 Route::get('questionnaires/code/{code}', [QuestionnaireController::class, 'showByCode']);
+// Rota para buscar todas as questões de um questionário (usando o código)
+Route::get('questions/code/{code}', [QuestionController::class, 'getQuestionsByQuestionnaireCode']);
