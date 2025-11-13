@@ -149,6 +149,19 @@ class QuestionSeeder extends Seeder
                     ["text" => "Estou completamente insatisfeito(a).", "score" => 0],
                 ],
             ],
+                        [
+                'questionnaire_code' => 'BDI-II', 
+                'question_identifier' => '4',
+                'question_text' => 'Tristeza:',
+                'response_type' => 'LIKERT_BDI',
+                'dimensions_json' => ['SOMATICO-AFETIVO'],
+                'options_json' => [
+                    ["text" => "Não me sinto triste.", "score" => 0],
+                    ["text" => "Sinto-me triste parte do tempo.", "score" => 1],
+                    ["text" => "Sinto-me triste o tempo todo.", "score" => 2],
+                    ["text" => "Sinto-me tão triste ou infeliz que não consigo suportar.", "score" => 3],
+                ],
+            ],
 
             // =========================================================
             // EXEMPLOS DO QUESTIONÁRIO BAI (Código: BAI)
