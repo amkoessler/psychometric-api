@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\QuestionController;
+use App\Http\Controllers\QuestionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PatientController; 
