@@ -81,115 +81,124 @@ class QuestionSeeder extends Seeder
     private function getStaticQuestionData(): array
     {
         // -------------------------------------------------------------
-        // OPÇÕES PADRÃO
+        // OPÇÕES DE RESPOSTAS
         // -------------------------------------------------------------
-        
-        // Exemplo: Likert de 4 pontos para BDI/BAI
-        $options_bai = [
-            ["text" => "0 - Absolutamente não.", "score" => 0],
-            ["text" => "1 - Levemente (não me incomodou muito).", "score" => 1],
-            ["text" => "2 - Moderadamente (foi muito desagradável).", "score" => 2],
-            ["text" => "3 - Gravemente (dificilmente pude suportar).", "score" => 3],
+
+        $opcoes_respostas = [
+            // {PALO} - 4 pontos (0-3)
+            'PALO' => [
+                ["text" => "0 - Absolutamente não.", "score" => 0],
+                ["text" => "1 - Levemente (não me incomodou muito).", "score" => 1],
+                ["text" => "2 - Moderadamente (foi muito desagradável).", "score" => 2],
+                ["text" => "3 - Gravemente (dificilmente pude suportar).", "score" => 3],
+            ],
+
+            // Beck Anxiety Inventory (BAI) - 4 pontos (0-3)
+            'BAI' => [
+                ["text" => "0 - Absolutamente não.", "score" => 0],
+                ["text" => "1 - Levemente (não me incomodou muito).", "score" => 1],
+                ["text" => "2 - Moderadamente (foi muito desagradável).", "score" => 2],
+                ["text" => "3 - Gravemente (dificilmente pude suportar).", "score" => 3],
+            ],
+
+            // Inventário de Fatores de Personalidade (IFP) - Binário (0-1)
+            'IFP' => [
+                ["text" => "Não me identifico/Falso", "score" => 0],
+                ["text" => "Me identifico/Verdadeiro", "score" => 1],
+            ],
+
+            // NEO-PI-R - LIKERT de 5 pontos (1-5)
+            'NEO-PI-R' => [
+                ['text' => 'Discordo Totalmente', 'score' => 1],
+                ['text' => 'Discordo Parcialmente', 'score' => 2],
+                ['text' => 'Neutro', 'score' => 3],
+                ['text' => 'Concordo Parcialmente', 'score' => 4],
+                ['text' => 'Concordo Totalmente', 'score' => 5],
+            ],
+
+            // RSES - LIKERT de 4 pontos (1-4)
+            'RSES' => [
+                ['text' => 'Discordo Fortemente', 'score' => 1],
+                ['text' => 'Discordo', 'score' => 2],
+                ['text' => 'Concordo', 'score' => 3],
+                ['text' => 'Concordo Fortemente', 'score' => 4],
+            ],
+
+            // PCL-5 - LIKERT de 5 pontos de Frequência (0-4)
+            'PCL-5' => [
+                ['text' => 'Não me incomodou', 'score' => 0],
+                ['text' => 'Um pouco', 'score' => 1],
+                ['text' => 'Moderadamente', 'score' => 2],
+                ['text' => 'Bastante', 'score' => 3],
+                ['text' => 'Extremamente', 'score' => 4],
+            ],
+
+            // BDI-II (Exemplo de item único, 4 pontos 0-3)
+            'BDI-II' => [
+                ["text" => "Não me sinto triste.", "score" => 0],
+                ["text" => "Sinto-me triste parte do tempo.", "score" => 1],
+                ["text" => "Sinto-me triste o tempo todo.", "score" => 2],
+                ["text" => "Sinto-me tão triste ou infeliz que não consigo suportar.", "score" => 3],
+            ],
+
+            // BDI-II (Exemplo de item único, 4 pontos 0-3)
+            'BDI-II' => [
+                ["text" => "Não me sinto triste.", "score" => 0],
+                ["text" => "Sinto-me triste parte do tempo.", "score" => 1],
+                ["text" => "Sinto-me triste o tempo todo.", "score" => 2],
+                ["text" => "Sinto-me tão triste ou infeliz que não consigo suportar.", "score" => 3],
+            ],
         ];
 
-        // Exemplo: Binário para IFP
-        $options_ifp = [
-            ["text" => "Não me identifico/Falso", "score" => 0],
-            ["text" => "Me identifico/Verdadeiro", "score" => 1],
+
+        // -------------------------------------------------------------
+        // TIPOS DE RESPOSTAS
+        // -------------------------------------------------------------
+
+        $tipos_respostas = [
+            'IFP' => 'BINARY_AGREEMENT', 
+            'BDI-II' => 'CATEGORICAL_CHOICE', 
+            'NEO-PI-R' => 'LIKERT_5_POINT', 
+            'PALO' => 'LIKERT_4_POINT', 
+            'RSES' => 'LIKERT_4_POINT',
+            'PCL-5' => 'PCL_5_FREQUENCIA',
+            'WAIS-IV' => 'MULTIPLE_CHOICE_SINGLE',
         ];
-        
+
         // -------------------------------------------------------------
         // DADOS FINAIS
         // -------------------------------------------------------------
 
         $questions = [];
+        $todos_questionarios = [];
+        $tmp_questions = [];
 
-        // Adiciona as perguntas BDI-II e BAI (mantendo os 5 exemplos anteriores)
-        $questions = array_merge($questions, [
-            // =========================================================
-            // EXEMPLOS DO QUESTIONÁRIO BDI-II (Código: BDI-II)
-            // ... (3 perguntas)
-            // =========================================================
-            [
-                'questionnaire_code' => 'BDI-II', 
-                'question_identifier' => '1',
-                'question_text' => 'Tristeza:',
-                'response_type' => 'LIKERT_BDI',
-                'dimensions_json' => ['SOMATICO-AFETIVO'],
-                'options_json' => [
-                    ["text" => "Não me sinto triste.", "score" => 0],
-                    ["text" => "Sinto-me triste parte do tempo.", "score" => 1],
-                    ["text" => "Sinto-me triste o tempo todo.", "score" => 2],
-                    ["text" => "Sinto-me tão triste ou infeliz que não consigo suportar.", "score" => 3],
-                ],
-            ],
-            [
-                'questionnaire_code' => 'BDI-II', 
-                'question_identifier' => '2',
-                'question_text' => 'Pessimismo:',
-                'response_type' => 'LIKERT_BDI',
-                'dimensions_json' => ['COGNITIVO'],
-                'options_json' => [
-                    ["text" => "Não estou desencorajado(a) quanto ao meu futuro.", "score" => 0],
-                    ["text" => "Sinto-me mais desencorajado(a) que no passado.", "score" => 1],
-                    ["text" => "Sinto que não vou me recuperar.", "score" => 2],
-                    ["text" => "Sinto que meu futuro não tem esperança.", "score" => 3],
-                ],
-            ],
-            [
-                'questionnaire_code' => 'BDI-II', 
-                'question_identifier' => '3',
-                'question_text' => 'Satisfação (Pergunta de pontuação inversa):',
-                'response_type' => 'LIKERT_BDI',
-                'dimensions_json' => ['COGNITIVO'],
-                'options_json' => [
-                    ["text" => "Sinto-me totalmente satisfeito(a).", "score" => 3], // Pontuação invertida
-                    ["text" => "Sinto-me ligeiramente satisfeito(a).", "score" => 2], 
-                    ["text" => "Estou insatisfeito(a).", "score" => 1],
-                    ["text" => "Estou completamente insatisfeito(a).", "score" => 0],
-                ],
-            ],
-                        [
-                'questionnaire_code' => 'BDI-II', 
-                'question_identifier' => '4',
-                'question_text' => 'Tristeza:',
-                'response_type' => 'LIKERT_BDI',
-                'dimensions_json' => ['SOMATICO-AFETIVO'],
-                'options_json' => [
-                    ["text" => "Não me sinto triste.", "score" => 0],
-                    ["text" => "Sinto-me triste parte do tempo.", "score" => 1],
-                    ["text" => "Sinto-me triste o tempo todo.", "score" => 2],
-                    ["text" => "Sinto-me tão triste ou infeliz que não consigo suportar.", "score" => 3],
-                ],
-            ],
+        // =========================================================
+        //  BDI-II (Código: BDI-II)
+        // =========================================================
+        $tmp_questions = [
+            ['id' => '1', 'text' => 'Tristeza:', 'dimension' => ['SOMATICO-AFETIVO']],
+            ['id' => '2', 'text' => 'Pessimismo:', 'dimension' => ['COGNITIVO']],
+            ['id' => '3', 'text' => 'Satisfação (Pergunta de pontuação inversa):', 'dimension' => ['COGNITIVO']],
+            ['id' => '4', 'text' => 'Tristeza:', 'dimension' => ['SOMATICO-AFETIVO']],
+        ];
+        $todos_questionarios['BDI-II'] = $tmp_questions;
 
-            // =========================================================
-            // EXEMPLOS DO QUESTIONÁRIO BAI (Código: BAI)
-            // ... (2 perguntas)
-            // =========================================================
-            [
-                'questionnaire_code' => 'PALO',
-                'question_identifier' => '1',
-                'question_text' => 'Dormência ou formigamento',
-                'response_type' => 'LIKERT_BAI',
-                'dimensions_json' => ['SOMATICO'],
-                'options_json' => $options_bai,
-            ],
-            [
-                'questionnaire_code' => 'PALO',
-                'question_identifier' => '2',
-                'question_text' => 'Sensação de calor',
-                'response_type' => 'LIKERT_BAI',
-                'dimensions_json' => ['SOMATICO', 'AFETIVO'], 
-                'options_json' => $options_bai,
-            ],
-        ]);
+        // =========================================================
+        //  PALO (Código: PALO)
+        // =========================================================
+        $tmp_questions = [
+            ['id' => '1', 'text' => 'Dormência ou formigamento', 'dimension' => ['SOMATICO']],
+            ['id' => '2', 'text' => 'Sensação de calor', 'dimension' => ['SOMATICO', 'AFETIVO']], 
+        ];
+        $todos_questionarios['PALO'] = $tmp_questions;
+
         
         // =============================================================
         // NOVO: 100 QUESTÕES DO IFP (Código: IFP)
         // =============================================================
         // As dimensões (Necessidades) foram inferidas com base no conteúdo da questão e na estrutura do IFP.
-        $ifp_questions = [
+        $tmp_questions = [
             ['id' => '01', 'text' => 'Gosto de fazer coisas que outras pessoas consideram fora do comum', 'dimension' => ['MU']],
             ['id' => '02', 'text' => 'Gostaria de realizar um grande feito ou grande obra na minha vida', 'dimension' => ['RE']],
             ['id' => '03', 'text' => 'Gosto de experimentar novidades e mudanças em meu dia-a-dia', 'dimension' => ['MU']],
@@ -291,19 +300,121 @@ class QuestionSeeder extends Seeder
             ['id' => '99', 'text' => 'Gosto de contar estórias e piadas engraçadas em festas', 'dimension' => ['EX']],
             ['id' => '100', 'text' => 'Gosto de dizer coisas que os outros consideram engraçadas e inteligentes', 'dimension' => ['EX']],
         ];
+        $todos_questionarios['IFP'] = $tmp_questions;
 
-        // Mapeia os dados do IFP para o formato final do Seeder
-        foreach ($ifp_questions as $q) {
-            $questions[] = [
-                'questionnaire_code' => 'IFP',
+
+        // =============================================================
+        // QUESTÕES NEO-PI-R (Código: NEO-PI-R)
+        // =============================================================
+
+        $tmp_questions = [
+            ['id' => 'N01', 'text' => 'Fico facilmente nervoso e chateado(a) quando as coisas não saem como planejado.', 'dimension' => ['N_ANSIEDADE']],
+            ['id' => 'E01', 'text' => 'Eu gosto de ser o centro das atenções em reuniões sociais.', 'dimension' => ['E_CALOR']],
+            ['id' => 'N02', 'text' => 'Eu me preocupo muito com o que os outros pensam de mim.', 'dimension' => ['N_VERGONHA']],
+        ];
+        $todos_questionarios['NEO-PI-R'] = $tmp_questions;
+
+        // =============================================================
+        //  QUESTÕES RSES (Código: RSES)
+        // =============================================================
+
+        $tmp_questions = [
+            ['id' => 'RS01', 'text' => 'Sinto que sou uma pessoa de valor, pelo menos num plano igual ao dos outros.', 'dimension' => ['AE']],
+            ['id' => 'RS02', 'text' => 'Sinto que não tenho muitas razões para me orgulhar.', 'dimension' => ['AE']],
+            ['id' => 'RS03', 'text' => 'Eu me sinto inútil às vezes.', 'dimension' => ['AE']],
+        ];
+         $todos_questionarios['RSES'] = $tmp_questions;
+
+
+
+
+        // =============================================================
+        //  QUESTÕES PCL-5 (Código: PCL-5)
+        // =============================================================
+
+        $tmp_questions = [
+            ['id' => 'PCL01', 'text' => 'Problemas para lembrar de partes importantes do evento estressor?', 'dimension' => ['B_REEXPERIENCIA']],
+            ['id' => 'PCL02', 'text' => 'Sentimentos de culpa ou ser culpado(a) por causa do evento estressor?', 'dimension' => ['C_EVITAMENTO']],
+            ['id' => 'PCL03', 'text' => 'Ter sonhos ruins sobre o evento estressor?', 'dimension' => ['B_REEXPERIENCIA']],
+        ];
+        $todos_questionarios['PCL-5'] = $tmp_questions;
+
+
+
+        // =============================================================
+        // QUESTÕES WAIS-IV (Código: WAIS-IV)
+        // =============================================================
+
+        // As opções são específicas por questão
+        $tmp_questions = [
+            [
+                'id' => 'W01',
+                'text' => 'Qual é o nome do pintor famoso pela obra "A Noite Estrelada"?',
+                'dimension' => ['VC_CONHECIMENTO'],
+                'options_json' => [
+                    ['score' => 0, 'text' => 'Claude Monet'],
+                    ['score' => 1, 'text' => 'Vincent van Gogh'],
+                    ['score' => 0, 'text' => 'Pablo Picasso'],
+                    ['score' => 0, 'text' => 'Salvador Dalí'],
+                ],
+            ],
+            [
+                'id' => 'W02',
+                'text' => 'Qual dos seguintes é um metal alcalino-terroso?',
+                'dimension' => ['VC_CONHECIMENTO'],
+                'options_json' => [
+                    ['score' => 0, 'text' => 'Sódio (Na)'],
+                    ['score' => 1, 'text' => 'Magnésio (Mg)'],
+                    ['score' => 0, 'text' => 'Ouro (Au)'],
+                    ['score' => 0, 'text' => 'Cloro (Cl)'],
+                ],
+            ],
+        ];
+        $todos_questionarios['WAIS-IV'] = $tmp_questions;
+
+
+        // =============================================================
+        //  Loop para popular o array questions
+        // =============================================================
+
+        foreach ($todos_questionarios as $questionnaire_code => $question_list) {
+
+            // $options
+            $options = [];
+
+
+            // Itera sobre as perguntas do questionário atual
+            foreach ($question_list as $q) {
+
+                If ($questionnaire_code == 'WAIS-IV' ){
+                    if ( $q['id'] == 'W01'){
+                        $options = [    
+                            ['score' => 0, 'text' => 'Claude Monet'],
+                            ['score' => 1, 'text' => 'Vincent van Gogh'],
+                            ['score' => 0, 'text' => 'Pablo Picasso'],
+                            ['score' => 0, 'text' => 'Salvador Dalí'],
+                        ];
+                    } elseif ($q['id'] == 'W02'){
+                        $options = [
+                            ['score' => 0, 'text' => 'Sódio (Na)'],
+                            ['score' => 1, 'text' => 'Magnésio (Mg)'],
+                            ['score' => 0, 'text' => 'Ouro (Au)'],
+                            ['score' => 0, 'text' => 'Cloro (Cl)'],
+                        ];
+                    } }
+                 else {
+                        $options = $opcoes_respostas[$questionnaire_code];
+                }
+                $questions[] = [
+                'questionnaire_code' => $questionnaire_code, 
                 'question_identifier' => $q['id'],
                 'question_text' => $q['text'],
-                'response_type' => 'BINARY_AGREEMENT',
+                'response_type' => $tipos_respostas[$questionnaire_code],
                 'dimensions_json' => $q['dimension'],
-                'options_json' => $options_ifp,
+                'options_json' => $options,
             ];
+            }
         }
-
         return $questions;
     }
-}
+}   
