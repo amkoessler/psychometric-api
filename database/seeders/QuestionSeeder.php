@@ -75,9 +75,7 @@ class QuestionSeeder extends Seeder
         return null;
     }
 
-    /**
-     * Retorna o array de dados estáticos das perguntas (BDI, BAI e IFP).
-     */
+
     private function getStaticQuestionData(): array
     {
         // -------------------------------------------------------------
@@ -102,7 +100,7 @@ class QuestionSeeder extends Seeder
             ],
 
             // Inventário de Fatores de Personalidade (IFP) - Binário (0-1)
-            'IFP' => [
+            'IFP-II' => [
                 ["text" => "Não me identifico/Falso", "score" => 0],
                 ["text" => "Me identifico/Verdadeiro", "score" => 1],
             ],
@@ -148,6 +146,11 @@ class QuestionSeeder extends Seeder
                 ["text" => "Sinto-me triste o tempo todo.", "score" => 2],
                 ["text" => "Sinto-me tão triste ou infeliz que não consigo suportar.", "score" => 3],
             ],
+             // DFH-IV (Presente(marcar) 1, Ausente (se não checar, a pontuação já é 0,)
+
+            'DFH-IV' => [
+                ["text" => "Presente", "score" => 1],
+            ],
         ];
 
 
@@ -156,12 +159,13 @@ class QuestionSeeder extends Seeder
         // -------------------------------------------------------------
 
         $tipos_respostas = [
-            'IFP' => 'BINARY_AGREEMENT', 
+            'IFP-II' => 'BINARY_AGREEMENT', 
             'BDI-II' => 'CATEGORICAL_CHOICE', 
             'NEO-PI-R' => 'LIKERT_5_POINT', 
             'PALO' => 'LIKERT_4_POINT', 
             'RSES' => 'LIKERT_4_POINT',
             'PCL-5' => 'PCL_5_FREQUENCIA',
+            'DFH-IV' => 'SCORE_CHECKLIST',
             'WAIS-IV' => 'MULTIPLE_CHOICE_SINGLE',
         ];
 
@@ -195,9 +199,9 @@ class QuestionSeeder extends Seeder
 
         
         // =============================================================
-        // NOVO: 100 QUESTÕES DO IFP (Código: IFP)
+        // NOVO: 100 QUESTÕES DO IFP-II (Código: IFP-II)
         // =============================================================
-        // As dimensões (Necessidades) foram inferidas com base no conteúdo da questão e na estrutura do IFP.
+        // As dimensões (Necessidades) foram inferidas com base no conteúdo da questão e na estrutura do IFP-II.
         $tmp_questions = [
             ['id' => '01', 'text' => 'Gosto de fazer coisas que outras pessoas consideram fora do comum', 'dimension' => ['MU']],
             ['id' => '02', 'text' => 'Gostaria de realizar um grande feito ou grande obra na minha vida', 'dimension' => ['RE']],
@@ -300,8 +304,59 @@ class QuestionSeeder extends Seeder
             ['id' => '99', 'text' => 'Gosto de contar estórias e piadas engraçadas em festas', 'dimension' => ['EX']],
             ['id' => '100', 'text' => 'Gosto de dizer coisas que os outros consideram engraçadas e inteligentes', 'dimension' => ['EX']],
         ];
-        $todos_questionarios['IFP'] = $tmp_questions;
+        $todos_questionarios['IFP-II'] = $tmp_questions;
 
+
+        // Adicionar ao seu array $tmp_questions (usando IDs a partir de '101' para não conflitar)
+        $tmp_questions = [
+            // =======================================================================
+            // FIGURA MASCULINA (FM)
+            // =======================================================================
+            ['id' => 'DFH-FM-101', 'text' => 'Cabeça presente (e fechada)', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FM-102', 'text' => 'Pescoço presente (ligando cabeça e tronco)', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FM-103', 'text' => 'Tronco presente (diferente da cabeça)', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FM-104', 'text' => 'Tronco desenhado em duas dimensões (2D)', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FM-105', 'text' => 'Proporção da cabeça para o tronco é razoável', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FM-106', 'text' => 'Braços presentes e unidos ao tronco', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FM-107', 'text' => 'Braços articulados (ombros, cotovelos)', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FM-108', 'text' => 'Pernas presentes e unidas ao tronco', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FM-109', 'text' => 'Pés ou calçados presentes e diferenciados', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FM-110', 'text' => 'Cinco dedos (ou indicação clara de dedos)', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FM-111', 'text' => 'Olhos presentes e com pupila/íris', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FM-112', 'text' => 'Nariz presente (2D ou com narinas)', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FM-113', 'text' => 'Boca presente (com lábios ou contorno)', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FM-114', 'text' => 'Orelhas presentes', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FM-115', 'text' => 'Cabelo presente (não rascunho ou rabisco)', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FM-116', 'text' => 'Vestuário (pelo menos duas peças)', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FM-117', 'text' => 'Detalhes de vestuário específicos (ex: gola, cinto)', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FM-118', 'text' => 'Transparência ausente (corpo não visível através da roupa)', 'dimension' => ['COGNITIVO']],
+            
+            // =======================================================================
+            // FIGURA FEMININA (FF) - Alguns itens são repetidos, outros são exclusivos.
+            // =======================================================================
+            ['id' => 'DFH-FF-201', 'text' => 'Cabeça presente (e fechada)', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FF-202', 'text' => 'Pescoço presente (ligando cabeça e tronco)', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FF-203', 'text' => 'Tronco presente (diferente da cabeça)', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FF-204', 'text' => 'Tronco desenhado em duas dimensões (2D)', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FF-205', 'text' => 'Proporção da cabeça para o tronco é razoável', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FF-206', 'text' => 'Braços presentes e unidos ao tronco', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FF-207', 'text' => 'Braços articulados (ombros, cotovelos)', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FF-208', 'text' => 'Pernas presentes e unidas ao tronco', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FF-209', 'text' => 'Pés ou calçados presentes e diferenciados', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FF-210', 'text' => 'Cinco dedos visíveis na mão', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FF-211', 'text' => 'Olhos presentes e com pupila/íris', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FF-212', 'text' => 'Nariz presente (2D ou com narinas)', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FF-213', 'text' => 'Boca presente (com lábios ou contorno)', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FF-214', 'text' => 'Orelhas presentes', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FF-215', 'text' => 'Cabelo presente (com detalhes femininos, ex: longo, penteado)', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FF-216', 'text' => 'Vestuário feminino (ex: vestido, saia, blusa)', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FF-217', 'text' => 'Detalhes de vestuário ou adereços (ex: brincos, colar, laços)', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FF-218', 'text' => 'Proporção geral correta e simetria', 'dimension' => ['COGNITIVO']],
+            ['id' => 'DFH-FF-219', 'text' => 'Ausência de monitorização (tentativa de apagar e corrigir)', 'dimension' => ['COGNITIVO']],
+        ];
+
+        // O seu array principal de questionários seria atualizado assim:
+        $todos_questionarios['DFH-IV'] = $tmp_questions;
 
         // =============================================================
         // QUESTÕES NEO-PI-R (Código: NEO-PI-R)

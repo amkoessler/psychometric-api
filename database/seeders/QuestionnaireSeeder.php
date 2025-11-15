@@ -113,12 +113,22 @@ class QuestionnaireSeeder extends Seeder
                 'edition' => 'Versão Original',
                 'is_active' => false, // Exemplo de teste não ativo
             ],
+            // [12/10] Teste de Apercepção Temática
+            [
+                'code' => 'DFH-IV',
+                'title' => 'Desenho da Figura Humana (versão IV)',
+                'description' => 'DFH-IV. Teste gráfico de inteligência não verbal para crianças de 5 a 12 anos. Utiliza o desenho de duas figuras humanas como método objetivo para avaliar o nível de desenvolvimento cognitivo e maturidade intelectual.',
+                'edition' => 'Versão Original',
+                'is_active' => true, // 
+            ],            
             // [11/10] EXCEL - Questionário IFP
-                'code' => 'IFP',
-                'title' => 'Inventário Fatorial de Personalidade ',
+            [
+                'code' => 'IFP-II',
+                'title' => 'Inventário Fatorial de Personalidade (IFP-ii)',
                 'description' => 'Mede 15 necessidades psicológicas e 3 escalas de validade.',
                 'edition' => '2020',
                 'is_active' => true, 
+            ]
         ];
     }
 }
