@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PatientController; 
 use App\Http\Controllers\QuestionnaireController;
 use App\Http\Controllers\AssessmentAreaController;
+use App\Http\Controllers\DimensionController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -29,3 +30,5 @@ Route::get('questionnaires/code/{code}', [QuestionnaireController::class, 'showB
 Route::get('questions/code/{code}', [QuestionController::class, 'getQuestionsByQuestionnaireCode']);
 // Rota para Grandes Áreas de Avaliação
 Route::get('assessment-areas', [AssessmentAreaController::class, 'index']);
+// Rota para Dimensões
+Route::get('dimensions', [DimensionController::class, 'index']);

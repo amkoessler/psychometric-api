@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class AssessmentArea extends Model
+class Dimension extends Model
 {
     use HasFactory;
-    
-    // O nome da tabela é 'assessment_areas' (Laravel assume plural)
+
+    // O nome da tabela é 'dimensions'
     
     protected $fillable = [
         'code',
@@ -18,13 +18,13 @@ class AssessmentArea extends Model
         'description',
         'is_active',
     ];
-
+    
     /**
-     * Uma Área de Avaliação possui muitas Dimensões (Muitos-para-Muitos).
+     * Uma Dimensão pertence a muitas Áreas de Avaliação (Muitos-para-Muitos).
      */
-    public function dimensions(): BelongsToMany
+    public function assessmentAreas(): BelongsToMany
     {
         // Usa a tabela pivô 'assessment_area_dimension'
-        return $this->belongsToMany(Dimension::class, 'assessment_area_dimension');
+        return $this->belongsToMany(AssessmentArea::class, 'assessment_area_dimension');
     }
 }
