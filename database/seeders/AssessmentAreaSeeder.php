@@ -38,15 +38,15 @@ class AssessmentAreaSeeder extends Seeder
             // [1/7] COG - Cognitivo
             [
                 'code' => 'COG',
-                'name' => 'Cognitivo',
-                'description' => 'Avaliação da capacidade intelectual geral, raciocínio lógico, abstrato e velocidade de processamento de informações.',
+                'name' => 'Função Cognitiva',
+                'description' => 'Avalia processos de pensamento, memória, atenção, raciocínio lógico e funções executivas.',
                 'is_active' => true,
             ],
             // [2/7] PER - Personalidade
             [
                 'code' => 'PER',
-                'name' => 'Personalidade',
-                'description' => 'Avaliação dos traços de caráter, padrões de comportamento, motivações e estilos de ajustamento (o "jeito de ser" do indivíduo).',
+                'name' => 'Traços de Personalidade (Big Five)',
+                'description' => 'Estrutura fundamental que abrange os fatores de Neuroticismo, Extroversão, Abertura, Amabilidade e Conscienciosidade.',
                 'is_active' => true,
             ],
             // [3/7] PRO - Projetivo
@@ -80,8 +80,15 @@ class AssessmentAreaSeeder extends Seeder
             // [7/7] EMO - Emocional / Clínico
             [
                 'code' => 'EMO',
-                'name' => 'Emocional / Clínico',
-                'description' => 'Avaliação do estado afetivo, da presença e da intensidade de sintomas psicológicos (ex: ansiedade, depressão, estresse, qualidade de vida).',
+                'name' => 'Regulação Emocional',
+                'description' => 'Mede a estabilidade emocional, capacidade de lidar com estresse, ansiedade e sintomas de humor (depressão).',
+                'is_active' => true,
+            ],
+            // [8/7] Área Social e Comportamental
+            [
+                'code' => 'SOC',
+                'name' => 'Habilidades Sociais e Comportamento',
+                'description' => 'Foca em traços de extroversão, habilidades interpessoais, comunicação e padrões comportamentais adaptativos.',
                 'is_active' => true,
             ],
         ];
