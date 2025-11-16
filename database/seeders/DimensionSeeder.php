@@ -4,33 +4,30 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use App\Models\Dimension; // Ajuste o namespace do seu modelo de Dimensão
+use App\Models\Dimension; // Seu Model de Dimensão
 
 class DimensionSeeder extends Seeder
 {
     /**
-     * Run the database seeds. (Método principal no topo)
+     * Run the database seeds.
      */
     public function run(): void
     {
-        // O método run() chama a função privada no final da classe para obter os dados.
+        // Obtém a lista completa e atualizada de dimensões
         $dimensions = $this->getStaticDimensionData();
 
         foreach ($dimensions as $data) {
-            // Atualiza ou cria o registro usando 'code' como chave de busca.
+            // Usa updateOrCreate para garantir que novos registros sejam criados
+            // e existentes sejam atualizados com a descrição e nome mais recentes.
             Dimension::updateOrCreate(
-                ['code' => $data['code']], // Condição de busca (chave única)
-                $data                      // Dados para criar ou ATUALIZAR TODOS OS CAMPOS
+                ['code' => $data['code']], // Chave de busca: code
+                $data                      // Dados para criação/atualização
             );
         }
     }
 
-    //---------------------------------------------------------
-    // DECLARAÇÃO DOS DADOS ESTÁTICOS NO FINAL DA CLASSE
-    //---------------------------------------------------------
-    
     /**
-     * Retorna o array de dados estáticos para as Dimensões.
+     * Retorna o array de dados estáticos para as Dimensões (23 itens).
      */
     private function getStaticDimensionData(): array
     {

@@ -30,5 +30,7 @@ Route::get('questionnaires/code/{code}', [QuestionnaireController::class, 'showB
 Route::get('questions/code/{code}', [QuestionController::class, 'getQuestionsByQuestionnaireCode']);
 // Rota para Grandes Áreas de Avaliação
 Route::get('assessment-areas', [AssessmentAreaController::class, 'index']);
+// Rota de Escrita (PUT): Sincroniza dimensões para uma área específica
+Route::put('assessment-areas/{id}/dimensions', [AssessmentAreaController::class, 'syncDimensions']);
 // Rota para Dimensões
 Route::get('dimensions', [DimensionController::class, 'index']);
