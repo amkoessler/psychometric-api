@@ -28,7 +28,10 @@ class QuestionnaireController extends Controller
         $code = strtoupper($code);
 
         // 2. Busca o questionário pela coluna 'code'.
-        $questionnaire = Questionnaire::where('code', $code)->first(); // Usa a coluna 'code'
+        // NOVO: Busca o Questionário E carrega o relacionamento 'questions'.
+        $questionnaire = Questionnaire::where('code', $code)
+                                ->with('questions') // <--- NOVIDADE
+                                ->first();
 
         // 3. Verifica se o questionário foi encontrado.
         if (!$questionnaire) {
