@@ -25,6 +25,9 @@ class QuestionnaireResource extends JsonResource
             'edition' => $this->edition,
             'is_active' => $this->is_active,
 
+            // NOVO: Inclui as Áreas de Avaliação (com as dimensões aninhadas)
+            'assessment_areas' => AssessmentAreaResource::collection($this->whenLoaded('assessmentAreas')),
+
             // NOVO: Inclui as questões aninhadas.
             // whenLoaded('questions') garante que este array só apareça se o ->with('questions') foi chamado.
             'questions' => QuestionResource::collection($this->whenLoaded('questions')),

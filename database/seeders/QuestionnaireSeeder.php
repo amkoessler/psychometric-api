@@ -12,15 +12,32 @@ class QuestionnaireSeeder extends Seeder
      */
     public function run(): void
     {
-        // O método run() está limpo. Ele chama a função privada no final da classe.
+        // O método run() chama a função privada no final da classe.
         $questionnaires = $this->getStaticQuestionnaireData();
+        $totalCount = count($questionnaires);
+        $count = 0;
 
+        echo "Iniciando o seeding de {$totalCount} Questionários...\n";
+        
         foreach ($questionnaires as $data) {
-            Questionnaire::updateOrCreate( 
+            
+            // Tenta criar ou atualizar (updateOrCreate) o registro
+            $questionnaire = Questionnaire::updateOrCreate( 
                 ['code' => $data['code']], // Condição de busca (chave única)
-                $data  );
+                $data  
+            );
+            
+            $count++;
+            
+            // Verifica se o modelo foi recém-criado ou atualizado
+            $action = $questionnaire->wasRecentlyCreated ? 'CRIADO' : 'ATUALIZADO';
+            
+            // Mensagem de log no terminal
+            echo "  [{$count}/{$totalCount}] {$action}: {$data['code']} - {$data['title']}\n";
 
         }
+        
+        echo "Seeding de Questionários concluído com sucesso.\n";
     }
 
     //---------------------------------------------------------
@@ -128,7 +145,47 @@ class QuestionnaireSeeder extends Seeder
                 'description' => 'Mede 15 necessidades psicológicas e 3 escalas de validade.',
                 'edition' => '2020',
                 'is_active' => true, 
-            ]
+            ],
+            // [13/XX] Teste G-36 (Raciocínio)
+    [
+        'code' => 'G-36',
+        'title' => 'Teste Não Verbal de Inteligência G-36',
+        'description' => 'Avalia o Fator g da inteligência (raciocínio não verbal e abstrato) em adolescentes e adultos, composto por 36 itens de completamento de série.',
+        'edition' => 'Revisada',
+        'is_active' => true,
+    ],
+    // [14/XX] Matrizes Progressivas de Raven
+    [
+        'code' => 'RAVEN',
+        'title' => 'Matrizes Progressivas de Raven (Escala Geral)',
+        'description' => 'Mede o componente edutivo do Fator g (capacidade de dar sentido a complexidade, raciocínio lógico e abstrato) em adolescentes e adultos.',
+        'edition' => 'Revisada',
+        'is_active' => true,
+    ],
+    // [15/XX] Inventário de Interesses de Holland (RIASEC)
+    [
+        'code' => 'HOLLAND',
+        'title' => 'Inventário de Interesses Profissionais (Modelo RIASEC)',
+        'description' => 'Mede as preferências e os interesses vocacionais e profissionais baseados nos seis tipos de personalidade (Realista, Investigativo, Artístico, Social, Empreendedor e Convencional).',
+        'edition' => 'Revisada',
+        'is_active' => true,
+    ],
+    // [16/XX] Inventário de Ansiedade de Beck
+    [
+        'code' => 'BAI',
+        'title' => 'Inventário de Ansiedade de Beck (BAI)',
+        'description' => 'Instrumento de auto-resposta para avaliar a intensidade dos sintomas de ansiedade, focando em sintomas somáticos, cognitivos e afetivos.',
+        'edition' => 'Revisada',
+        'is_active' => true,
+    ],
+    // [17/XX] Teste de Atenção Concentrada (AC)
+    [
+        'code' => 'AC',
+        'title' => 'Teste de Atenção Concentrada',
+        'description' => 'Mede a capacidade de selecionar um estímulo relevante em meio a distratores e manter o foco na tarefa por um período de tempo (frequentemente usado em contextos de seleção).',
+        'edition' => 'Versão Genérica',
+        'is_active' => true,
+    ],
         ];
     }
 }

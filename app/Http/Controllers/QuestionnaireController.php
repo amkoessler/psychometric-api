@@ -30,7 +30,8 @@ class QuestionnaireController extends Controller
         // 2. Busca o questionário pela coluna 'code'.
         // NOVO: Busca o Questionário E carrega o relacionamento 'questions'.
         $questionnaire = Questionnaire::where('code', $code)
-                                ->with('questions') // <--- NOVIDADE
+                                // NOVO: Carrega Questões, Áreas e as Dimensões aninhadas.
+                                ->with('questions', 'assessmentAreas.dimensions') 
                                 ->first();
 
         // 3. Verifica se o questionário foi encontrado.
