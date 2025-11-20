@@ -8,41 +8,64 @@ use App\Models\Questionnaire;
 
 class QuestionnaireController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        // 1. Busca todos os questionários
-        $questionnaires = Questionnaire::all();
 
-        // 2. Retorna a coleção formatada pelo Resource
+    /**
+     * Retorna uma lista de todos os questionários, com carregamento dinâmico de relacionamentos.
+     */
+    public function index(Request $request) // <--- Recebe o Request
+    {
+        // 1. Processa o parâmetro 'include'.
+        // explode(',', ...) transforma a string (ex: "questions,assessmentAreas") em um array.
+        // array_filter(...) remove qualquer string vazia que possa surgir.
+        $relations = array_filter(explode(',', $request->query('include', '')));
+        
+        // 2. Inicia a query builder
+        $query = Questionnaire::query();
+        
+        // 3. Aplica o carregamento dinâmico APENAS se houver relacionamentos solicitados.
+        if (!empty($relations)) {
+            $query->with($relations);
+        }
+
+        // 4. Busca todos os questionários com os relacionamentos carregados (se houver)
+        $questionnaires = $query->get();
+
+        // 5. Retorna a coleção formatada pelo Resource
+        // O Resource usará o whenLoaded() e só incluirá os dados se eles tiverem sido carregados acima.
         return QuestionnaireResource::collection($questionnaires);
     }
 
 
-    // NOVO MÉTODO: Busca um questionário específico com base no seu acrônimo/código.
-    public function showByCode(string $code)
+    //  Busca um questionário específico com base no seu acrônimo/código.
+    public function showByCode(string $code, Request $request)
     {
-        // 1. Garante que o código de busca está em MAIÚSCULAS (consistência com os Seeders)
+        // 1. Garante que o código de busca está em MAIÚSCULAS
         $code = strtoupper($code);
 
-        // 2. Busca o questionário pela coluna 'code'.
-        // NOVO: Busca o Questionário E carrega o relacionamento 'questions'.
-        $questionnaire = Questionnaire::where('code', $code)
-                                // NOVO: Carrega Questões, Áreas e as Dimensões aninhadas.
-                                ->with('questions', 'assessmentAreas.dimensions') 
-                                ->first();
+        // 2. Processa o parâmetro 'include' para carregamento dinâmico.
+        $relations = array_filter(explode(',', $request->query('include', '')));
 
-        // 3. Verifica se o questionário foi encontrado.
-        if (!$questionnaire) {
+        // 3. Inicia e constrói a query:
+        $query = Questionnaire::where('code', $code); // <-- A condição WHERE vai aqui.
+        
+        // 4. Aplica o carregamento dinâmico (Eager Loading).
+        if (!empty($relations)) {
+            $query->with($relations);
+        }
+        
+        // 5. EXECUTA a busca e pega APENAS o primeiro modelo encontrado.
+        // O método ->first() retorna o modelo ou null.
+        $questionnaire = $query->first(); 
+
+        // 6. Verifica se o questionário foi encontrado.
+        if (!$questionnaire) { // <-- Verifica se o resultado é null
             return response()->json([
                 'message' => 'Questionário não encontrado.',
             ], 404);
         }
 
-        // 4. Retorna o questionário formatado pelo Resource.
-        // O Resource garante que a saída JSON estará sempre no formato esperado.
+        // 7. Retorna o questionário formatado pelo Resource.
+        // Agora o $questionnaire é um único objeto Model, conforme esperado.
         return new QuestionnaireResource($questionnaire);
     }
 

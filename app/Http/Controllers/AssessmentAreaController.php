@@ -13,16 +13,23 @@ class AssessmentAreaController extends Controller
     /**
      * Retorna uma lista de todas as Áreas de Avaliação ativas.
      */
-    public function index(): JsonResource
+    public function index(Request $request): JsonResource //  Recebe o Request "include"
     {
-        // 1. Busca todas as áreas ativas, ordenadas por código (ou nome)
-        $areas = AssessmentArea::where('is_active', true)
-                                ->with('dimensions')
-                                ->orderBy('code')
-                                ->get();
+        // 1. Inicia a query com os filtros padrão
+        $query = AssessmentArea::where('is_active', true)
+                                ->orderBy('code');
+        
+        // 2. Verifica se o parâmetro ?include=dimensions foi passado na URL
+        if ($request->query('include') === 'dimensions') {
+            // Se sim, carrega as dimensões (Eager Loading)
+            $query->with('dimensions');
+        }
 
-        // 2. Retorna a coleção diretamente
-        // Usamos JsonResource para garantir que o formato JSON seja padrão e limpo.
+        // 3. Executa a query
+        $areas = $query->get();
+
+        // 4. O Resource (AssessmentAreaResource) usará whenLoaded() e incluirá as dimensões
+        // somente se elas foram carregadas acima.
         return AssessmentAreaResource::collection($areas);
     }
 
