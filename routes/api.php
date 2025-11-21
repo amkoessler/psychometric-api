@@ -7,6 +7,7 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\QuestionnaireController;
 use App\Http\Controllers\AssessmentAreaController;
 use App\Http\Controllers\DimensionController;
+use App\Http\Controllers\ResponseOptionController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -33,8 +34,20 @@ Route::get('assessment-areas', [AssessmentAreaController::class, 'index']);
 // Rota para Dimensões
 Route::get('dimensions', [DimensionController::class, 'index']);
 
-################
-### P U T ####
+  #######################
+ ## Response Options ###
+#######################
+// Endpoint para buscar as opções de resposta por código da escala
+// Exemplo de uso: GET /api/response-options/LIKERT_6_PONTOS_NORMAL
+Route::get('response-options/{scaleCode}',[ResponseOptionController::class, 'showByScaleCode']);
+Route::get('response-options', [ResponseOptionController::class, 'index']);
+// Rotas de ESCRITA (CRUD Faltante)
+Route::post('response-options', [ResponseOptionController::class, 'store']);
+Route::patch('response-options/{id}', [ResponseOptionController::class, 'update']); // Usamos ID da opção, não o scaleCode
+Route::delete('response-options/{id}', [ResponseOptionController::class, 'destroy']);
+
+  ##############
+ ### P U T ####
 ##############
 // Rota de Escrita (PUT): Sincroniza dimensões para uma área específica
 Route::put('assessment-areas/{id}/dimensions', [AssessmentAreaController::class, 'syncDimensions']);
