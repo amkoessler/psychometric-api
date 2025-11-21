@@ -186,6 +186,15 @@ class QuestionnaireSeeder extends Seeder
         'edition' => 'Versão Genérica',
         'is_active' => true,
     ],
-        ];
+    // [18/XX] Escala de Transtorno do Déficit de Atenção e Hiperatividade (ETDAH-II)
+    [
+        'code' => 'ETDAH-II',
+        'title' => 'Escala de Transtorno do Déficit de Atenção e Hiperatividade (versão II)',
+        'description' => 'Instrumento psicométrico para avaliação dos sintomas de TDAH em crianças e adolescentes. Avalia as dimensões de Desatenção, Hiperatividade/Impulsividade, Aspectos Emocionais e Autorregulação.',
+        'edition' => 'Versão Atual', // Ajustar conforme o manual que você possui.
+        'is_active' => true, 
+    ],
+    
+];
     }
 }

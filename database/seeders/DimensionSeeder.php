@@ -181,6 +181,12 @@ class DimensionSeeder extends Seeder
                 'description' => 'Preferência por atividades de ajuda, ensino, serviço, aconselhamento e trabalho em equipe.',
                 'is_active' => true,
             ],
+            [
+                'code' => 'COM-EXT',
+                'name' => 'Comportamento de Externalização (TDAH)',
+                'description' => 'Mede a frequência e intensidade dos comportamentos hiperativos, impulsivos e problemas de conduta que definem o quadro clínico do Transtorno do Déficit de Atenção e Hiperatividade.',
+                'is_active' => true, 
+            ],
         ];
     }
 }

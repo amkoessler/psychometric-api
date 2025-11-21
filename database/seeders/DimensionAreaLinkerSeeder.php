@@ -71,6 +71,7 @@ class DimensionAreaLinkerSeeder extends Seeder
             'FE' => ['NEU'],
             'MCP' => ['NEU'],
             'MLP' => ['NEU'],
+            'COM-EXT' => ['NEU'],
 
             // PER, EMO
             'AE' => ['PER', 'EMO'],
@@ -83,6 +84,7 @@ class DimensionAreaLinkerSeeder extends Seeder
             // EMO
             'DEP' => ['EMO'],
             'EST' => ['EMO'],
+            'COM-EXT' => ['EMO'],
 
             // APT
             'RV' => ['APT'],
@@ -93,6 +95,9 @@ class DimensionAreaLinkerSeeder extends Seeder
             'REA' => ['INT'],
             'INV' => ['INT'],
             'SOC' => ['INT'],
+
+            //SOC
+            'COM-EXT' => ['SOC'],
         ];
     }
 }
