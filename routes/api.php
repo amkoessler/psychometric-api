@@ -15,6 +15,8 @@ Route::get('/user', function (Request $request) {
 
 // Adicionando a rota de Status
 Route::get('/status', function () {
+    // 🚨 NOVO LOG: Esta linha será executada toda vez que /api/status for chamada.
+    logger("LOG STATUS: Rota /api/status chamada com sucesso.");
     return response()->json([
         'status' => 'ok',
         'environment' => config('app.env'),

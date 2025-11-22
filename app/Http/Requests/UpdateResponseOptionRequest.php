@@ -8,26 +8,34 @@ use App\Models\ResponseOption;
 
 class UpdateResponseOptionRequest extends FormRequest
 {
-   public function authorize(): bool
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
     {
         return true; 
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     */
     public function rules(): array
     {
+
+        
+        // 1. Obtém o ID da rota (response-options/{id}).
         $id = $this->route('id');
         
-        // 1. Busca o registro existente usando o ID da rota
+        // 2. Busca o registro existente usando o ID da rota.
         $existingOption = ResponseOption::find($id);
 
         if (!$existingOption) {
-            // Se a opção não existir, o Controller retornará 404. A validação pode parar aqui.
+            // Se a opção não existir, retornamos regras vazias. 
+            // O Controller se encarregará de retornar 404.
             return []; 
         }
         
-        // 2. Determina o scale_code que será usado para a checagem de unicidade.
-        // Se o usuário enviou um novo 'scale_code', usamos ele.
-        // Caso contrário (PATCH sem scale_code), usamos o código atual do registro.
+        // 3. Determina o scale_code que será usado para a checagem de unicidade.
         $scaleCodeToUse = $this->input('scale_code', $existingOption->scale_code);
 
         return [
@@ -37,10 +45,11 @@ class UpdateResponseOptionRequest extends FormRequest
             'score_value' => [
                 'sometimes', 
                 'integer',
-                // AGORA FUNCIONA: Verifica a unicidade usando o scaleCodeToUse,
-                // que garante que o scale_code atual seja incluído na checagem.
+                // AGORA FUNCIONA: Implementação final da regra Rule::unique
                 Rule::unique('response_options')
+                    // 🚨 ESSENCIAL: Ignora o próprio ID da opção que estamos atualizando.
                     ->ignore($id)
+                    // Garante que a unicidade seja checada apenas dentro da mesma escala.
                     ->where(fn ($query) => $query->where('scale_code', $scaleCodeToUse)),
             ],
         ];

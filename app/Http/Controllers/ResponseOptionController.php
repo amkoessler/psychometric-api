@@ -31,7 +31,7 @@ class ResponseOptionController extends Controller
             ], 404);
         }
         
-        // 3. Retorna o item único (funciona perfeitamente, pois o objeto não está "bizarro")
+        // 3. Retorna o item único
         return new ResponseOptionResource($responseOption);
     }
 
@@ -60,8 +60,8 @@ class ResponseOptionController extends Controller
                                         ->get()
                                         ->groupBy('scale_code');
             
-            // 3. CORREÇÃO DO ERRO: Mapeia sobre a coleção de escalas para ANEXAR
-            // a lista de opções formatada, evitando o conflito do Resource.
+            // 3. Mapeia sobre a coleção de escalas para ANEXAR
+            // a lista de opções formatada.
             $scales = $scales->map(function ($scale) use ($allOptions) {
                 $scaleCode = $scale->scale_code;
                 
@@ -117,9 +117,6 @@ class ResponseOptionController extends Controller
      */
     public function store(StoreResponseOptionRequest $request)
     {
-        // 🚨 LOG 1: Verificar se a requisição chegou ao Controller POST
-        logger("LOG 1: Entrou no método store().");
-        
         $option = ResponseOption::create($request->validated());
         
         // 201 Created
@@ -134,9 +131,6 @@ class ResponseOptionController extends Controller
      */
     public function update(UpdateResponseOptionRequest $request, string $id)
     {
-        // 🚨 LOG 1: Verificar se a requisição chegou ao Controller
-        logger("LOG 1: Entrou no método update() para o ID: {$id}");
-
         $option = ResponseOption::find($id);
 
         if (!$option) {
@@ -209,7 +203,6 @@ class ResponseOptionController extends Controller
         }
 
         // 3. Executa a Atualização em Massa (Bulk Update).
-        // A função update() é mais rápida para este tipo de alteração.
         ResponseOption::where('scale_code', $oldCode)->update([
             'scale_code' => $newCode
         ]);
