@@ -37,6 +37,8 @@ Route::get('dimensions', [DimensionController::class, 'index']);
   #######################
  ## Response Options ###
 #######################
+// Deve vir antes da rota GET /{scaleCode}
+Route::patch('response-options/rename', [ResponseOptionController::class, 'renameScale']);
 // Endpoint para buscar as opções de resposta por código da escala
 // Exemplo de uso: GET /api/response-options/LIKERT_6_PONTOS_NORMAL
 Route::get('response-options/{scaleCode}',[ResponseOptionController::class, 'showByScaleCode']);

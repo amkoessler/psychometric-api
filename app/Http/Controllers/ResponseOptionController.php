@@ -145,4 +145,49 @@ class ResponseOptionController extends Controller
             throw $e;
         }
     }
+
+    /**
+     * Renomeia o scale_code de um conjunto inteiro de opções de resposta.
+     * Rota: PATCH /api/response-options/rename
+     */
+    public function renameScale(Request $request)
+    {
+        // 1. Validação Manual: Garantir que os códigos estão presentes e são strings.
+        try {
+            $request->validate([
+                'old_code' => ['required', 'string', 'max:50'],
+                'new_code' => ['required', 'string', 'max:50', 'different:old_code'], // Novo código deve ser diferente
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Erro de validação.',
+                'errors' => $e->errors(),
+            ], 422);
+        }
+
+        $oldCode = strtoupper($request->input('old_code'));
+        $newCode = strtoupper($request->input('new_code'));
+
+        // 2. Verifica se o código antigo existe antes de tentar a atualização.
+        $count = ResponseOption::where('scale_code', $oldCode)->count();
+
+        if ($count === 0) {
+            return response()->json([
+                'message' => "Nenhuma opção de resposta encontrada com o código '{$oldCode}'.",
+            ], 404);
+        }
+
+        // 3. Executa a Atualização em Massa (Bulk Update).
+        // A função update() é mais rápida para este tipo de alteração.
+        ResponseOption::where('scale_code', $oldCode)->update([
+            'scale_code' => $newCode
+        ]);
+
+        // 4. Retorno de Sucesso.
+        return response()->json([
+            'message' => "Sucesso! O código de escala '{$oldCode}' foi renomeado para '{$newCode}'.",
+            'updated_count' => $count,
+            'new_code' => $newCode,
+        ], 200);
+    }
 }
