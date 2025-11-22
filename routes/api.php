@@ -41,8 +41,9 @@ Route::get('dimensions', [DimensionController::class, 'index']);
 Route::patch('response-options/rename', [ResponseOptionController::class, 'renameScale']);
 // Endpoint para buscar as opções de resposta por código da escala
 // Exemplo de uso: GET /api/response-options/LIKERT_6_PONTOS_NORMAL
-Route::get('response-options/{scaleCode}',[ResponseOptionController::class, 'showByScaleCode']);
-Route::get('response-options', [ResponseOptionController::class, 'index']);
+Route::get('response-options/code/{scaleCode}',[ResponseOptionController::class, 'showByCode']);
+Route::get('response-options/scales', [ResponseOptionController::class, 'listScales']);
+Route::get('response-options/{id}', [ResponseOptionController::class, 'index']);
 // Rotas de ESCRITA (CRUD Faltante)
 Route::post('response-options', [ResponseOptionController::class, 'store']);
 Route::patch('response-options/{id}', [ResponseOptionController::class, 'update']); // Usamos ID da opção, não o scaleCode

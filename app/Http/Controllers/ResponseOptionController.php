@@ -9,15 +9,40 @@ use App\Http\Requests\UpdateResponseOptionRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Database\QueryException;
+use Illuminate\Validation\ValidationException;
 
 class ResponseOptionController extends Controller
 {
+
+/**
+     * Retorna UMA única opção de resposta pelo ID da chave primária.
+     * Comportamento de 'show', nomeado como 'index' a seu pedido (Método simples).
+     * Rota: GET /api/response-options/{id}
+     */
+    public function index(string $id) // <-- Agora recebe o ID como string simples
+    {
+        // 1. Busca manual do registro
+        $responseOption = ResponseOption::find($id);
+
+        // 2. Verifica se encontrou o registro
+        if (!$responseOption) {
+            return response()->json([
+                'message' => "Opção de resposta com ID '{$id}' não encontrada.",
+            ], 404);
+        }
+        
+        // 3. Retorna o item único (funciona perfeitamente, pois o objeto não está "bizarro")
+        return new ResponseOptionResource($responseOption);
+    }
+
+
+
     /**
      * Lista todos os códigos de escala disponíveis. Opcionalmente, inclui
      * os detalhes das opções de resposta se ?include=options for fornecido.
      * Rota: GET /api/response-options[?include=options]
      */
-    public function index(Request $request)
+    public function listScales(Request $request)
     {
         // 1. Verifica se o parâmetro 'include=options' foi solicitado.
         $includeOptions = $request->query('include') === 'options';
@@ -92,6 +117,9 @@ class ResponseOptionController extends Controller
      */
     public function store(StoreResponseOptionRequest $request)
     {
+        // 🚨 LOG 1: Verificar se a requisição chegou ao Controller POST
+        logger("LOG 1: Entrou no método store().");
+        
         $option = ResponseOption::create($request->validated());
         
         // 201 Created
@@ -106,6 +134,9 @@ class ResponseOptionController extends Controller
      */
     public function update(UpdateResponseOptionRequest $request, string $id)
     {
+        // 🚨 LOG 1: Verificar se a requisição chegou ao Controller
+        logger("LOG 1: Entrou no método update() para o ID: {$id}");
+
         $option = ResponseOption::find($id);
 
         if (!$option) {
