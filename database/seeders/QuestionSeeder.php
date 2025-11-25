@@ -579,7 +579,7 @@ class QuestionSeeder extends Seeder
     foreach ($todos_questionarios as $questionnaire_code => $question_list) {
         $options = []; // Manter esta variável, mesmo que não seja usada aqui
         foreach ($question_list as $q) {
-            // OBSERVAÇÃO: Seu array original não define $opcoes_respostas, então o usei diretamente.
+            // OBSERVAÇÃO: Seu array original não define $opcoes_respostas
             // Se você precisar do 'response_type', ele está em $tipos_respostas
             $questions[] = [
                 'questionnaire_code' => $questionnaire_code, 
