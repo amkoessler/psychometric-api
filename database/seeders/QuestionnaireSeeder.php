@@ -98,14 +98,14 @@ class QuestionnaireSeeder extends Seeder
                 'edition' => 'Sistema Exner',
                 'is_active' => false, // Exemplo de teste não ativo
             ],
-            // [7/10] Escala Wechsler de Inteligência para Adultos
-            [
-                'code' => 'WAIS-IV',
-                'title' => 'Escala Wechsler de Inteligência para Adultos (WAIS-IV)',
-                'description' => 'Avaliação do funcionamento cognitivo e da inteligência (QI) em adultos, abrangendo 4 índices: Compreensão Verbal, Raciocínio Perceptual, Memória Operacional e Velocidade de Processamento.',
-                'edition' => '4ª Edição',
-                'is_active' => true,
-            ],
+            // // [7/10] Escala Wechsler de Inteligência para Adultos
+            // [
+            //     'code' => 'WAIS-IV',
+            //     'title' => 'Escala Wechsler de Inteligência para Adultos (WAIS-IV)',
+            //     'description' => 'Avaliação do funcionamento cognitivo e da inteligência (QI) em adultos, abrangendo 4 índices: Compreensão Verbal, Raciocínio Perceptual, Memória Operacional e Velocidade de Processamento.',
+            //     'edition' => '4ª Edição',
+            //     'is_active' => true,
+            // ],
             // [8/10] Inventário de Estilos Parentais
             [
                 'code' => 'IEP',

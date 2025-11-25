@@ -19,18 +19,9 @@ class Question extends Model
         'display_order',
         'question_text',
         'response_type',
-        'options_json', // JSON
-        'dimensions_json', // JSON
+        'scale_code',
     ];
 
-    /**
-     * As colunas que devem ser convertidas automaticamente (Casting).
-     * Isso garante que os campos JSON sejam manipulados como arrays PHP.
-     */
-    protected $casts = [
-        'options_json' => 'array',
-        'dimensions_json' => 'array',
-    ];
 
     // --- RELACIONAMENTOS ---
 

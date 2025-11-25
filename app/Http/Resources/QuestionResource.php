@@ -22,9 +22,8 @@ class QuestionResource extends JsonResource
             'text' => $this->question_text,
             'response_type' => $this->response_type,
             
-            // Campos JSON (automaticamente convertidos em JSON no output da API)
-            'options' => $this->options_json,
-            'dimensions' => $this->dimensions_json, 
+            'scale_code' => $this->scale_code,
+
             
             // Timestamps (opcional)
             'created_at' => $this->created_at,
