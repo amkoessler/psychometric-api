@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('assessment_areas', function (Blueprint $table) {
+        Schema::create('areas', function (Blueprint $table) {
             $table->id(); // id (BIGINT - PK - Auto Incremento)
             
             // Campos Funcionais
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('assessment_areas');
+        Schema::dropIfExists('areas');
     }
 };

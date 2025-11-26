@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('assessment_area_dimension', function (Blueprint $table) {
+        Schema::create('area_dimension', function (Blueprint $table) {
             
             // Chave Estrangeira para AssessmentArea
-            $table->foreignId('assessment_area_id') 
-                ->constrained('assessment_areas')
+            $table->foreignId('area_id') 
+                ->constrained('areas')
                 ->onDelete('cascade'); // Se a área for deletada, as ligações são deletadas
             
             // Chave Estrangeira para Dimension
@@ -24,7 +24,7 @@ return new class extends Migration
                 ->onDelete('cascade'); // Se a dimensão for deletada, as ligações são deletadas
 
             // Define a chave primária composta (garante que uma ligação não se repita)
-            $table->primary(['assessment_area_id', 'dimension_id']);
+            $table->primary(['area_id', 'dimension_id']);
 
             // Opcional: Campos de rastreamento
             $table->timestamps(); 
@@ -36,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('assessment_area_dimension');
+        Schema::dropIfExists('area_dimension');
     }
 };
