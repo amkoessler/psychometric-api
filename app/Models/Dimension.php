@@ -20,11 +20,23 @@ class Dimension extends Model
     ];
     
     /**
-     * Uma Dimensão pertence a muitas Áreas de Avaliação (Muitos-para-Muitos).
+     * Relação N:M: Dimensão <-> Área
+     * Uma Dimensão pertence a muitas Áreas (Classificação Conceitual).
      */
-    public function assessmentAreas(): BelongsToMany
+    public function areas(): BelongsToMany
     {
-        // Usa a tabela pivô 'assessment_area_dimension'
-        return $this->belongsToMany(AssessmentArea::class, 'assessment_area_dimension');
+        // Usa o nome limpo da tabela pivô (area_dimension)
+        return $this->belongsToMany(Area::class, 'area_dimension');
+    }
+
+    /**
+     * Relação N:M Faltante: Dimensão <-> Fator
+     * Uma Dimensão agrupa muitos Fatores, e um Fator contribui para muitas Dimensões.
+     * Esta tabela pivô ('dimension_factor') será crucial para as regras de agregação.
+     */
+    public function factors(): BelongsToMany
+    {
+        // Usa a tabela pivô 'dimension_factor'
+        return $this->belongsToMany(Factor::class, 'dimension_factor');
     }
 }

@@ -4,14 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory; 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Questionnaire extends Model
 {
     use HasFactory; 
 
-    // Opcional: Proteger contra atribuição em massa
     protected $fillable = [
         'code',
         'title',
@@ -21,20 +19,33 @@ class Questionnaire extends Model
     ];
 
     /**
-     * Um questionário tem muitas perguntas.
+     * Relação N:M: Questionário <-> Área
+     * Um Questionário possui muitas Áreas de Avaliação (Classificação Primária).
      */
-    public function questions(): HasMany
+    public function areas(): BelongsToMany 
     {
-        return $this->hasMany(Question::class);
+        // Usa a classe e o nome da tabela pivô corrigidos
+        return $this->belongsToMany(Area::class, 'area_questionnaire');
+    }
+    
+    /**
+     * Relação N:M: Questionário <-> Fator (FALTANTE)
+     * Um Questionário é composto por muitos Fatores (Estrutura do Teste).
+     * A pivô 'questionnaire_factor' guarda o peso do Fator no Teste.
+     */
+    public function factors(): BelongsToMany
+    {
+        return $this->belongsToMany(Factor::class, 'questionnaire_factor');
     }
 
+
     /**
-     * Um questionário possui muitas Áreas de Avaliação (M:N).
-     * @return BelongsToMany
+     * Relação N:M: Questionário <-> Questão (Reutilização)
+     * Um Questionário tem muitas Questões, e uma Questão pode estar em múltiplos Questionários.
+     * Mudar de HasMany para BelongsToMany para permitir reutilização de itens.
      */
-    public function assessmentAreas(): BelongsToMany // <-- NOVIDADE
+    public function questions(): BelongsToMany
     {
-        // ATENÇÃO: É necessário criar a tabela pivô (ex: 'assessment_area_questionnaire')
-        return $this->belongsToMany(AssessmentArea::class, 'assessment_area_questionnaire');
+        return $this->belongsToMany(Question::class, 'questionnaire_question');
     }
 }

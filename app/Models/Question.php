@@ -5,32 +5,49 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Question extends Model
 {
     use HasFactory;
 
-    /**
-     * As colunas que podem ser preenchidas via atribuição em massa.
-     */
     protected $fillable = [
-        'questionnaire_id',
+        'answer_id', 
         'question_identifier',
-        'display_order',
         'question_text',
-        'response_type',
-        'scale_code',
+        'display_order', 
     ];
 
-
-    // --- RELACIONAMENTOS ---
+    
+    // --- RELACIONAMENTOS N:M ---
 
     /**
-     * Uma pergunta pertence a um Questionário.
-     * Define o relacionamento BelongsTo com o Model Questionnaire.
+     * Relação N:M: Questão <-> Factor (Cálculo)
      */
-    public function questionnaire(): BelongsTo
+    public function factors(): BelongsToMany
     {
-        return $this->belongsTo(Questionnaire::class);
+        return $this->belongsToMany(Factor::class, 'factor_question')
+                    ->withPivot(['weight', 'is_reverse_scored']); 
+    }
+    
+    /**
+     * Relação N:M: Questão <-> Questionário (Conteúdo)
+     * A Tabela Pivô 'questionnaire_question' define a ordem específica no Teste.
+     */
+    public function questionnaires(): BelongsToMany
+    {
+        return $this->belongsToMany(Questionnaire::class, 'questionnaire_question')
+                    ->withPivot('display_order'); // <--- Ordem específica do Questionário
+    }
+    
+
+    // --- RELACIONAMENTO 1:N ---
+    
+    /**
+     * Relação 1:N: Questão -> Answer (Opções de Resposta)
+     */
+    public function answer(): BelongsTo
+    {
+        return $this->belongsTo(Answer::class);
     }
 }
