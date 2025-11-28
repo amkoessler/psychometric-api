@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\ResponseOption;
+use App\Models\Scale; // NECESSÁRIO para buscar o ID da escala mestre
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -13,9 +14,17 @@ class ResponseOptionSeeder extends Seeder
      */
     public function run(): void
     {
-        // Limpa a tabela antes de popular (Para desenvolvimento e testes)
+        // 1. Limpa a tabela antes de popular
         DB::table('response_options')->truncate();
         
+        // 2. Carrega todas as escalas para mapeamento rápido (code => id)
+        $scalesMap = Scale::all()->keyBy('code');
+
+        if ($scalesMap->isEmpty()) {
+            echo "ERRO: O ScaleSeeder deve ser executado primeiro. As escalas mestre não foram encontradas na tabela 'scales'. Abortando ResponseOptionSeeder.\n";
+            return;
+        }
+
         $options = $this->getResponseOptionsData();
         $totalCount = count($options);
         $count = 0;
@@ -24,20 +33,34 @@ class ResponseOptionSeeder extends Seeder
 
         foreach ($options as $data) {
             
-            // updateOrCreate para garantir que a escala/score seja única
-            $responseOption = ResponseOption::updateOrCreate([
-                'scale_code' => $data['scale_code'],
+            // A. Encontra o ID da Escala usando o 'scale_code'
+            $scaleCode = $data['scale_code'];
+            $scale = $scalesMap->get($scaleCode);
+
+            if (!$scale) {
+                echo "AVISO: Escala com código '{$scaleCode}' não encontrada. Opção '{$data['option_text']}' ignorada.\n";
+                continue;
+            }
+
+            // B. Prepara os dados finais para ResponseOption (agora usando scale_id)
+            $responseOptionData = [
+                'scale_id' => $scale->id, // Usa a chave estrangeira (FK)
                 'score_value' => $data['score_value'],
-            ], $data);
+                'option_text' => $data['option_text'],
+            ];
+            
+            // C. updateOrCreate para garantir a unicidade de (scale_id, score_value)
+            $responseOption = ResponseOption::updateOrCreate([
+                'scale_id' => $scale->id, // CRITÉRIO AGORA USA FK ID
+                'score_value' => $data['score_value'],
+            ], $responseOptionData);
             
             $count++;
             
-            // ----------------------------------------------------
-            // LOGGING DETALHADO (O esquema maneiro!)
-            // ----------------------------------------------------
+            // D. LOGGING DETALHADO
             $action = $responseOption->wasRecentlyCreated ? 'CRIADO' : 'ATUALIZADO';
             
-            echo "  [{$count}/{$totalCount}] {$action}: [{$data['scale_code']}] {$data['option_text']} (Valor: {$data['score_value']})\n";
+            echo "  [{$count}/{$totalCount}] {$action}: [ID: {$scale->id} | {$scaleCode}] {$data['option_text']} (Valor: {$data['score_value']})\n";
         }
         
         echo "Seeding de Opções de Resposta concluído com sucesso.\n";
@@ -45,6 +68,7 @@ class ResponseOptionSeeder extends Seeder
 
     /**
      * Retorna o array de dados estáticos para as Opções de Resposta (23 itens).
+     * O array MANTÉM 'scale_code' para facilitar a leitura e o mapeamento interno.
      */
     private function getResponseOptionsData(): array
     {

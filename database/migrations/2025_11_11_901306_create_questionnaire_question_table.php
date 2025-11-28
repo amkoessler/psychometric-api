@@ -7,42 +7,27 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Cria a tabela transacional que representa uma instância de preenchimento.
-     * Ela atua como a tabela pivô N:M com contexto extra.
+     * Cria a tabela pivô para a relação N:M entre Questionário e Questão.
      */
     public function up(): void
     {
-        Schema::create('questionnaire_sessions', function (Blueprint $table) {
-            $table->id();
-
-            // 1. Chaves Estrangeiras (O pivô N:M)
-
-            // Quem preencheu (Paciente)
-            $table->foreignId('patient_id') 
-                  ->constrained('patients')
-                  ->onDelete('cascade'); // Se o paciente for deletado, a sessão deve ser deletada.
-
-            // Qual questionário mestre foi preenchido
+        Schema::create('questionnaire_question', function (Blueprint $table) {
+            // Chave Estrangeira para Questionário
             $table->foreignId('questionnaire_id')
-                  ->constrained('questionnaires')
-                  ->onDelete('restrict'); // O questionário mestre não deve ser deletado se houver sessões ligadas a ele.
+                  ->constrained('questionnaires') // Assume tabela 'questionnaires'
+                  ->onDelete('cascade');
 
-            // 2. Campos Transacionais (Contexto)
+            // Chave Estrangeira para Questão
+            $table->foreignId('question_id')
+                  ->constrained('questions') // Assume tabela 'questions'
+                  ->onDelete('cascade');
+
+            // Campo específico do relacionamento (A ORDEM DE EXIBIÇÃO VAI AQUI)
+            $table->integer('display_order')->default(0)->comment('Ordem de exibição da questão dentro do questionário específico.');
+
+            // Define a chave primária composta (para garantir unicidade e eficiência)
+            $table->primary(['questionnaire_id', 'question_id']);
             
-            // Status da avaliação (ex: 'STARTED', 'COMPLETED', 'CANCELLED')
-            $table->string('status', 20)->default('STARTED')->index();
-
-            // Rastreamento de tempo
-            $table->dateTime('started_at')->useCurrent(); // Quando o preenchimento começou
-            $table->dateTime('completed_at')->nullable(); // Quando o preenchimento terminou
-
-            // Outras informações úteis
-            $table->decimal('total_score', 8, 2)->nullable(); // Score geral final (pode ser calculado mais tarde)
-
-            // Garante que um paciente só pode começar um questionário uma vez
-            // Se o status permitir múltiplos, essa restrição pode ser removida ou alterada
-            $table->unique(['patient_id', 'questionnaire_id']); 
-
             $table->timestamps();
         });
     }
@@ -52,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('questionnaire_sessions');
+        Schema::dropIfExists('questionnaire_question');
     }
 };

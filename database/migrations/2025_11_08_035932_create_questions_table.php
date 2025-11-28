@@ -18,8 +18,8 @@ return new class extends Migration
             // Esta linha resolve o erro SQL original de "column questionnaire_id does not exist".
             $table->foreignId('questionnaire_id')->constrained()->onDelete('cascade');
             
-            // Chave Estrangeira 1:N para scale_code (Escala de Resposta)
-            $table->foreignId('scale_code')->constrained('answers')->onDelete('restrict');
+            // NOVO: Chave Estrangeira 1:N para a tabela MESTRA 'scales'
+            $table->foreignId('scale_id')->constrained('scales')->onDelete('restrict')->comment('FK para a escala de resposta utilizada.');
             
             // 1. Campos Funcionais
             // Removida a unicidade 'question_identifier' para permitir identificadores como '01' em diferentes questionários.

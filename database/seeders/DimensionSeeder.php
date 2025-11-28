@@ -5,33 +5,81 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use App\Models\Dimension; // Seu Model de Dimensão
+use Throwable; // Importar a classe Throwable
 
 class DimensionSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Run the database seeds. (Método principal no topo)
      */
     public function run(): void
     {
+        // NOVO: Inicializa contadores
+        $createdCount = 0;
+        $updatedCount = 0;
+        $errorCount = 0;
+
         // Obtém a lista completa e atualizada de dimensões
         $dimensions = $this->getStaticDimensionData();
+        $totalCount = count($dimensions);
+        $count = 0;
 
+        // Feedback de Início
+        $this->command->info('✨ Iniciando o Seeder de Dimensões (DimensionSeeder). Total de ' . $totalCount . ' registros.');
+        $this->command->newLine();
+
+        // Loop principal
         foreach ($dimensions as $data) {
-            // Usa updateOrCreate para garantir que novos registros sejam criados
-            // e existentes sejam atualizados com a descrição e nome mais recentes.
-            // A chave de busca é o 'code'.
-            Dimension::updateOrCreate(
-                ['code' => $data['code']],
-                $data
-            );
+            
+            $dimensionCode = $data['code'];
+            $dimensionName = $data['name'];
+
+            try {
+                // Tenta encontrar a Dimensão pelo código ou cria/atualiza
+                $dimension = Dimension::updateOrCreate(
+                    ['code' => $dimensionCode], // Condição de busca (chave única)
+                    $data                     // Dados para criar ou ATUALIZAR
+                );
+
+                $count++;
+
+                // Verifica se foi criado ou atualizado
+                if ($dimension->wasRecentlyCreated) {
+                    $this->command->info("[{$count}/{$totalCount}] ✅ CRIADA: Dimensão #{$dimensionCode} - {$dimensionName}");
+                    $createdCount++;
+                } else {
+                    $this->command->comment("[{$count}/{$totalCount}] 🔄 ATUALIZADA: Dimensão #{$dimensionCode} - {$dimensionName}");
+                    $updatedCount++;
+                }
+
+            } catch (Throwable $e) {
+                // Loga qualquer erro durante a operação
+                $this->command->error("❌ ERRO ao processar Dimensão #{$dimensionCode} ({$dimensionName}). Detalhe: " . $e->getMessage());
+                $errorCount++;
+            }
         }
+        
+        $this->command->newLine();
+        $this->command->line("--------------------------------------------------");
+        
+        // Sumário Final
+        $this->command->info('📊 Sumário da Execução:');
+        
+        if ($createdCount > 0) {
+            $this->command->line("  - Novas Dimensões Criadas: **{$createdCount}**");
+        }
+        if ($updatedCount > 0) {
+            $this->command->line("  - Dimensões Existentes Atualizadas: **{$updatedCount}**");
+        }
+        if ($errorCount > 0) {
+            $this->command->warn("  - Dimensões com Erro: **{$errorCount}**");
+        }
+        
+        $this->command->info('DimensionSeeder concluído.');
     }
 
     /**
-     * Retorna o array de dados estáticos para as Dimensões (25 itens).
-     *
-     * ATENÇÃO: Os códigos foram ajustados para ter no máximo 5 caracteres,
-     * compatível com um campo VARCHAR(5) (ex: 'COM-EXT' -> 'CEXT').
+     * Retorna o array de dados estáticos para as Dimensões (27 itens).
      */
     private function getStaticDimensionData(): array
     {
@@ -98,7 +146,7 @@ class DimensionSeeder extends Seeder
                 'is_active' => true,
             ],
 
-            // --- PERSONALIDADE / EMOCIONAL / CLÍNICO (8) ---
+            // --- PERSONALIDADE / EMOCIONAL / CLÍNICO (8 + 2 Novos = 10) ---
             [
                 'code' => 'EXT',
                 'name' => 'Extroversão',
@@ -109,6 +157,18 @@ class DimensionSeeder extends Seeder
                 'code' => 'CSC',
                 'name' => 'Conscienciosidade',
                 'description' => 'Organização, responsabilidade, disciplina, auto-eficácia, e cumprimento de metas e regras.',
+                'is_active' => true,
+            ],
+            [
+                'code' => 'OPN', // NOVO: Abertura
+                'name' => 'Abertura à Experiência',
+                'description' => 'Apreciação pela arte, emoção, aventura, ideias não convencionais e curiosidade intelectual. Um dos fatores do Big Five.',
+                'is_active' => true,
+            ],
+            [
+                'code' => 'AGR', // NOVO: Amabilidade
+                'name' => 'Amabilidade (Agreeableness)',
+                'description' => 'Tendência a ser compassivo e cooperativo em vez de suspeito e antagônico em relação aos outros. Um dos fatores do Big Five.',
                 'is_active' => true,
             ],
             [
@@ -136,13 +196,13 @@ class DimensionSeeder extends Seeder
                 'is_active' => true,
             ],
             [
-                'code' => 'NAFIL', // CÓDIGO AJUSTADO (era N.AFL)
+                'code' => 'NAFIL', 
                 'name' => 'Necessidade de Afiliação',
                 'description' => 'Desejo de estabelecer e manter relações sociais harmoniosas, ser aceito e fazer parte de um grupo.',
                 'is_active' => true,
             ],
             [
-                'code' => 'NREAL', // CÓDIGO AJUSTADO (era N.REA)
+                'code' => 'NREAL', 
                 'name' => 'Necessidade de Realização',
                 'description' => 'Desejo de superação, busca por excelência, competência e sucesso em tarefas difíceis.',
                 'is_active' => true,
@@ -186,7 +246,7 @@ class DimensionSeeder extends Seeder
                 'is_active' => true,
             ],
             [
-                'code' => 'CEXT', // CÓDIGO AJUSTADO (era COM-EXT)
+                'code' => 'CEXT', 
                 'name' => 'Comportamento de Externalização (TDAH)',
                 'description' => 'Mede a frequência e intensidade dos comportamentos hiperativos, impulsivos e problemas de conduta que definem o quadro clínico do Transtorno do Déficit de Atenção e Hiperatividade.',
                 'is_active' => true, 

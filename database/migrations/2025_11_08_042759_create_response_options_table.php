@@ -15,9 +15,10 @@ return new class extends Migration
         Schema::create('response_options', function (Blueprint $table) {
             $table->id(); // ID (PK, Auto-Increment)
             
-            // Coluna que identifica a escala (Ex: LIKERT_4, YES_NO)
-            $table->string('scale_code', 50); 
             
+            // NOVO: Adicione a chave estrangeira para a nova tabela 'scales'
+            $table->foreignId('scale_id')->constrained('scales')->onDelete('cascade');
+
             // O valor que será usado no cálculo do score
             $table->integer('score_value'); 
             
@@ -25,7 +26,7 @@ return new class extends Migration
             $table->string('option_text', 255); 
             
             // CRUCIAL: Impede que a mesma escala tenha dois itens com o mesmo valor de score
-            $table->unique(['scale_code', 'score_value']);
+            $table->unique(['scale_id', 'score_value']);
             
             $table->timestamps();
         });

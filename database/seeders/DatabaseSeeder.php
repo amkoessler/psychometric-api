@@ -19,10 +19,12 @@ class DatabaseSeeder extends Seeder
         $this->call([
             // Adicione a chamada para o PatientSeeder
             PatientSeeder::class,
-            ResponseOptionSeeder::class,
             AreaSeeder::class,
             DimensionSeeder::class,
-            DimensionAreaLinkerSeeder::class,
+            FactorSeeder::class,
+            ScaleSeeder::class,
+            ResponseOptionSeeder::class,
+            AreaDimensionLinkerSeeder::class,
             QuestionnaireSeeder::class,
             QuestionnaireAreaLinkerSeeder::class,
             QuestionSeeder::class,

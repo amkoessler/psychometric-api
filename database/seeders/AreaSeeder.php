@@ -4,25 +4,76 @@ namespace Database\Seeders;
 
 use App\Models\Area;
 use Illuminate\Database\Seeder;
-
+use Throwable; // Importar a classe Throwable
 
 class AreaSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Run the database seeds. (Método principal no topo)
      */
     public function run(): void
     {
-        // O método run() chama a função privada no final da classe para obter os dados.
-        $areas = $this->getStaticAreaData();
+        // NOVO: Inicializa contadores
+        $createdCount = 0;
+        $updatedCount = 0;
+        $errorCount = 0;
 
+        $areas = $this->getStaticAreaData();
+        $totalCount = count($areas);
+        $count = 0;
+
+        // Feedback de Início
+        $this->command->info('✨ Iniciando o Seeder de Áreas (AreaSeeder). Total de ' . $totalCount . ' registros.');
+        $this->command->newLine();
+
+        // Loop principal
         foreach ($areas as $data) {
-            // Assumindo que você usa um modelo chamado Area ou similar
-            Area::updateOrCreate( 
-                ['code' => $data['code']], // Condição de busca (chave única)
-                $data 
-            );
+            
+            $areaCode = $data['code'];
+            $areaName = $data['name'];
+
+            try {
+                // Tenta encontrar a Área pelo código ou cria/atualiza
+                $area = Area::updateOrCreate(
+                    ['code' => $areaCode], // Condição de busca (chave única)
+                    $data                     // Dados para criar ou ATUALIZAR
+                );
+
+                $count++;
+
+                // Verifica se foi criado ou atualizado
+                if ($area->wasRecentlyCreated) {
+                    $this->command->info("[{$count}/{$totalCount}] ✅ CRIADA: Área #{$areaCode} - {$areaName}");
+                    $createdCount++;
+                } else {
+                    $this->command->comment("[{$count}/{$totalCount}] 🔄 ATUALIZADA: Área #{$areaCode} - {$areaName}");
+                    $updatedCount++;
+                }
+
+            } catch (Throwable $e) {
+                // Loga qualquer erro durante a operação (NOVO)
+                $this->command->error("❌ ERRO ao processar Área #{$areaCode} ({$areaName}). Detalhe: " . $e->getMessage());
+                $errorCount++;
+            }
         }
+        
+        $this->command->newLine();
+        $this->command->line("--------------------------------------------------");
+        
+        // Sumário Final
+        $this->command->info('📊 Sumário da Execução:');
+        
+        if ($createdCount > 0) {
+            $this->command->line("  - Novas Áreas Criadas: **{$createdCount}**");
+        }
+        if ($updatedCount > 0) {
+            $this->command->line("  - Áreas Existentes Atualizadas: **{$updatedCount}**");
+        }
+        if ($errorCount > 0) {
+            $this->command->warn("  - Áreas com Erro: **{$errorCount}**");
+        }
+        
+        $this->command->info('AreaSeeder concluído.');
     }
 
     //---------------------------------------------------------
@@ -35,56 +86,56 @@ class AreaSeeder extends Seeder
     private function getStaticAreaData(): array
     {
         return [
-            // [1/7] COG - Cognitivo
+            // [1/8] COG - Cognitivo
             [
                 'code' => 'COG',
                 'name' => 'Função Cognitiva',
                 'description' => 'Avalia processos de pensamento, memória, atenção, raciocínio lógico e funções executivas.',
                 'is_active' => true,
             ],
-            // [2/7] PER - Personalidade
+            // [2/8] PER - Personalidade
             [
                 'code' => 'PER',
                 'name' => 'Traços de Personalidade (Big Five)',
                 'description' => 'Estrutura fundamental que abrange os fatores de Neuroticismo, Extroversão, Abertura, Amabilidade e Conscienciosidade.',
                 'is_active' => true,
             ],
-            // [3/7] PRO - Projetivo
+            // [3/8] PRO - Projetivo
             [
                 'code' => 'PRO',
                 'name' => 'Projetivo',
                 'description' => 'Avaliação de aspectos emocionais, inconscientes e dinâmicos da personalidade através de estímulos ambíguos ou desenhos.',
                 'is_active' => true,
             ],
-            // [4/7] NEU - Neuropsicológico
+            // [4/8] NEU - Neuropsicológico
             [
                 'code' => 'NEU',
                 'name' => 'Neuropsicológico',
                 'description' => 'Avaliação das Funções Executivas e das relações entre o funcionamento cerebral e o comportamento (memória, atenção, linguagem, etc.).',
                 'is_active' => true,
             ],
-            // [5/7] APT - Aptidão
+            // [5/8] APT - Aptidão
             [
                 'code' => 'APT',
                 'name' => 'Aptidão',
                 'description' => 'Avaliação do potencial ou da proficiência do indivíduo em uma habilidade específica (ex: mecânica, numérica, espacial, fluência verbal).',
                 'is_active' => true,
             ],
-            // [6/7] INT - Interesses
+            // [6/8] INT - Interesses
             [
                 'code' => 'INT',
                 'name' => 'Interesses',
                 'description' => 'Avaliação das preferências e motivações do indivíduo por diferentes tipos de atividades, fundamental para orientação vocacional e profissional.',
                 'is_active' => true,
             ],
-            // [7/7] EMO - Emocional / Clínico
+            // [7/8] EMO - Emocional / Clínico
             [
                 'code' => 'EMO',
                 'name' => 'Regulação Emocional',
                 'description' => 'Mede a estabilidade emocional, capacidade de lidar com estresse, ansiedade e sintomas de humor (depressão).',
                 'is_active' => true,
             ],
-            // [8/7] Área Social e Comportamental
+            // [8/8] Área Social e Comportamental
             [
                 'code' => 'SOC',
                 'name' => 'Habilidades Sociais e Comportamento',
