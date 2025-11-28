@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\AssessmentArea;
+use App\Models\Area;
 use App\Models\Dimension;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DimensionAreaLinkerSeeder extends Seeder
 {
@@ -13,91 +14,91 @@ class DimensionAreaLinkerSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Mapear Áreas para acesso rápido
-        // Usa o método pluck('id', 'code') para criar um array associativo de [code => id]
-        $areas = AssessmentArea::all()->pluck('id', 'code');
-        
-        // 2. Definir as Associações de Dimensão
-        // Mapeamos o código da Dimensão para uma lista de códigos de Áreas
-        $dimensionToAreaMap = $this->getDimensionToAreaMap();
+        $this->command->info('Iniciando o Seeder de Ligações Dimensão-Área (Area -> Dimensões).');
 
-        foreach ($dimensionToAreaMap as $dimensionCode => $areaCodes) {
+        // 1. Mapear Dimensões para acesso rápido (Cache)
+        // Usa o método pluck('id', 'code') para criar um array associativo de [code => id]
+        $dimensions = Dimension::all()->pluck('id', 'code');
+        
+        // 2. Definir as Associações de Área (Estrutura: Área => [Dimensões])
+        $areaToDimensionMap = $this->getAreaToDimensionMap();
+
+        foreach ($areaToDimensionMap as $areaCode => $dimensionCodes) {
             
-            // Busca a Dimensão pelo código
-            $dimension = Dimension::where('code', $dimensionCode)->first();
+            $this->command->line("--------------------------------------------------");
+            $this->command->info("Processando Área: {$areaCode}");
             
-            if (!$dimension) {
-                echo "AVISO: Dimensão com código '{$dimensionCode}' não encontrada. Pulando ligação.\n";
+            // Busca a Área pelo código
+            $area = Area::where('code', $areaCode)->first();
+            
+            if (!$area) {
+                $this->command->warn("AVISO: Área com código '{$areaCode}' não encontrada. Pulando ligação.");
                 continue;
             }
 
-            // Mapeia os códigos de Áreas para seus respectivos IDs (usando o cache $areas)
-            $areaIdsToAttach = collect($areaCodes)
-                ->map(fn ($code) => $areas[$code] ?? null) // Mapeia código para ID
-                ->filter() // Remove entradas nulas caso o código da área não exista
+            // Mapeia os códigos de Dimensões para seus respectivos IDs (usando o cache $dimensions)
+            $dimensionIdsToAttach = collect($dimensionCodes)
+                ->map(function ($code) use ($dimensions, $areaCode) {
+                    $dimensionId = $dimensions[$code] ?? null;
+                    
+                    if (!$dimensionId) {
+                         // Loga as dimensões que não foram encontradas (útil para debug)
+                        $this->command->warn("Dimensão '{$code}' (para Área {$areaCode}) NÃO foi encontrada no banco.");
+                    }
+                    
+                    return $dimensionId;
+                })
+                ->filter() // Remove entradas nulas (Dimensões não encontradas)
                 ->toArray();
             
-            // 3. Executa a Ligação (attach)
-            // O sync garante que apenas as associações definidas aqui permaneçam.
-            $dimension->assessmentAreas()->sync($areaIdsToAttach);
+            // Verifica se há algo para anexar
+            if (empty($dimensionIdsToAttach)) {
+                $this->command->warn("Nenhuma dimensão válida encontrada para anexar à Área {$areaCode}.");
+                continue;
+            }
+
+            // 3. Executa a Ligação (sync)
+            // Usa a relação 'dimensions()' definida no Model Area: $area->dimensions()->sync(...)
+            $area->dimensions()->sync($dimensionIdsToAttach);
+            
+            $this->command->info("SUCESSO: Área '{$area->name}' ({$areaCode}) sincronizada com " . count($dimensionIdsToAttach) . " Dimensão(ões).");
         }
+        
+        $this->command->info('--------------------------------------------------');
+        $this->command->info('Dimension-Area Linker Seeder concluído.');
     }
 
-
-    // ...
-// Conteúdo anterior do DimensionAreaLinkerSeeder.php
-// ...
-
     /**
-     * Retorna o mapa de ligações (Muitos-para-Muitos).
-     * Dimensões que pertencem a múltiplas áreas devem ter vários códigos de área.
+     * Retorna o mapa de ligações (Muitos-para-Muitos) na estrutura Área => Dimensões.
      */
-    private function getDimensionToAreaMap(): array
+    private function getAreaToDimensionMap(): array
     {
         return [
-            // [Dimensão] => [Áreas às quais pertence]
-            // COG
-            'FG' => ['COG'],
-            'RL' => ['COG', 'APT'],
-            'RA' => ['COG'],
+            // [Área] => [Dimensões que pertencem a esta Área]
+            
+            // COG (Função Cognitiva)
+            'COG' => ['FG', 'RL', 'RA', 'AC', 'AD', 'AA', 'VP'], 
 
-            // COG, NEU
-            'AC' => ['COG', 'NEU'],
-            'AD' => ['COG', 'NEU'],
-            'AA' => ['COG', 'NEU'],
-            'VP' => ['COG', 'NEU'],
+            // PER (Personalidade)
+            'PER' => ['AE', 'EXT', 'CSC', 'ANX', 'N.AFL', 'N.REA'],
 
-            // NEU
-            'FE' => ['NEU'],
-            'MCP' => ['NEU'],
-            'MLP' => ['NEU'],
-            'COM-EXT' => ['NEU'],
+            // PRO (Projetivo)
+            'PRO' => [], 
 
-            // PER, EMO
-            'AE' => ['PER', 'EMO'],
-            'EXT' => ['PER'],
-            'CSC' => ['PER'],
-            'ANX' => ['PER', 'EMO'],
-            'N.AFL' => ['PER'],
-            'N.REA' => ['PER'],
+            // NEU (Neuropsicológico)
+            'NEU' => ['AC', 'AD', 'AA', 'VP', 'FE', 'MCP', 'MLP', 'COM-EXT'],
 
-            // EMO
-            'DEP' => ['EMO'],
-            'EST' => ['EMO'],
-            'COM-EXT' => ['EMO'],
+            // APT (Aptidão)
+            'APT' => ['RL', 'RV', 'RN', 'RM'],
 
-            // APT
-            'RV' => ['APT'],
-            'RN' => ['APT'],
-            'RM' => ['APT'],
+            // INT (Interesses)
+            'INT' => ['REA', 'INV', 'SOC'],
 
-            // INT
-            'REA' => ['INT'],
-            'INV' => ['INT'],
-            'SOC' => ['INT'],
+            // EMO (Regulação Emocional / Clínico)
+            'EMO' => ['AE', 'ANX', 'DEP', 'EST', 'COM-EXT'],
 
-            //SOC
-            'COM-EXT' => ['SOC'],
+            // SOC (Habilidades Sociais e Comportamento)
+            'SOC' => ['COM-EXT'],
         ];
     }
 }

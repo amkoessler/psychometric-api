@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\AssessmentArea;
+use App\Models\Area;
 use Illuminate\Database\Seeder;
 
 
-class AssessmentAreaSeeder extends Seeder
+class AreaSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,8 +17,8 @@ class AssessmentAreaSeeder extends Seeder
         $areas = $this->getStaticAreaData();
 
         foreach ($areas as $data) {
-            // Assumindo que você usa um modelo chamado AssessmentArea ou similar
-            AssessmentArea::updateOrCreate( 
+            // Assumindo que você usa um modelo chamado Area ou similar
+            Area::updateOrCreate( 
                 ['code' => $data['code']], // Condição de busca (chave única)
                 $data 
             );

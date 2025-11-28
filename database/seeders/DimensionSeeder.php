@@ -19,20 +19,24 @@ class DimensionSeeder extends Seeder
         foreach ($dimensions as $data) {
             // Usa updateOrCreate para garantir que novos registros sejam criados
             // e existentes sejam atualizados com a descrição e nome mais recentes.
+            // A chave de busca é o 'code'.
             Dimension::updateOrCreate(
-                ['code' => $data['code']], // Chave de busca: code
-                $data                      // Dados para criação/atualização
+                ['code' => $data['code']],
+                $data
             );
         }
     }
 
     /**
-     * Retorna o array de dados estáticos para as Dimensões (23 itens).
+     * Retorna o array de dados estáticos para as Dimensões (25 itens).
+     *
+     * ATENÇÃO: Os códigos foram ajustados para ter no máximo 5 caracteres,
+     * compatível com um campo VARCHAR(5) (ex: 'COM-EXT' -> 'CEXT').
      */
     private function getStaticDimensionData(): array
     {
         return [
-            // --- COGNITIVO / NEUROPSICOLÓGICO ---
+            // --- COGNITIVO / NEUROPSICOLÓGICO (10) ---
             [
                 'code' => 'FG',
                 'name' => 'Fator G (Inteligência Geral)',
@@ -94,7 +98,7 @@ class DimensionSeeder extends Seeder
                 'is_active' => true,
             ],
 
-            // --- PERSONALIDADE / EMOCIONAL / CLÍNICO ---
+            // --- PERSONALIDADE / EMOCIONAL / CLÍNICO (8) ---
             [
                 'code' => 'EXT',
                 'name' => 'Extroversão',
@@ -132,19 +136,19 @@ class DimensionSeeder extends Seeder
                 'is_active' => true,
             ],
             [
-                'code' => 'N.AFL',
+                'code' => 'NAFIL', // CÓDIGO AJUSTADO (era N.AFL)
                 'name' => 'Necessidade de Afiliação',
                 'description' => 'Desejo de estabelecer e manter relações sociais harmoniosas, ser aceito e fazer parte de um grupo.',
                 'is_active' => true,
             ],
             [
-                'code' => 'N.REA',
+                'code' => 'NREAL', // CÓDIGO AJUSTADO (era N.REA)
                 'name' => 'Necessidade de Realização',
                 'description' => 'Desejo de superação, busca por excelência, competência e sucesso em tarefas difíceis.',
                 'is_active' => true,
             ],
 
-            // --- APTIDÃO / INTERESSES ---
+            // --- APTIDÃO / INTERESSES / CLÍNICO (7) ---
             [
                 'code' => 'RV',
                 'name' => 'Raciocínio Verbal',
@@ -182,7 +186,7 @@ class DimensionSeeder extends Seeder
                 'is_active' => true,
             ],
             [
-                'code' => 'COM-EXT',
+                'code' => 'CEXT', // CÓDIGO AJUSTADO (era COM-EXT)
                 'name' => 'Comportamento de Externalização (TDAH)',
                 'description' => 'Mede a frequência e intensidade dos comportamentos hiperativos, impulsivos e problemas de conduta que definem o quadro clínico do Transtorno do Déficit de Atenção e Hiperatividade.',
                 'is_active' => true, 

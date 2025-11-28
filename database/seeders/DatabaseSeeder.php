@@ -19,7 +19,14 @@ class DatabaseSeeder extends Seeder
         $this->call([
             // Adicione a chamada para o PatientSeeder
             PatientSeeder::class,
-            QuestionnaireSeeder::class, // <-- Chamar o novo Seeder
+            ResponseOptionSeeder::class,
+            AreaSeeder::class,
+            DimensionSeeder::class,
+            DimensionAreaLinkerSeeder::class,
+            QuestionnaireSeeder::class,
+            QuestionnaireAreaLinkerSeeder::class,
+            QuestionSeeder::class,
+            
         ]);
     }
 }

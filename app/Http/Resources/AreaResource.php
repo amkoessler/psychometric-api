@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AssessmentAreaResource extends JsonResource
+class AreaResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
@@ -14,7 +14,7 @@ class AssessmentAreaResource extends JsonResource
             'code' => $this->code,
             'name' => $this->name,
             'description' => $this->description,
-            'is_active' => $this->is_active,
+            'is_active' => (bool)$this->is_active,
             
             // INCLUI AS DIMENSÕES: Carrega o relacionamento 'dimensions'
             'dimensions' => DimensionResource::collection($this->whenLoaded('dimensions')),

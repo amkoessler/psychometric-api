@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Questionnaire;
-use App\Models\AssessmentArea;
+use App\Models\Area;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -16,11 +16,11 @@ class QuestionnaireAreaLinkerSeeder extends Seeder
     {
         // Limpa a tabela pivô antes de rodar, garantindo que não haja duplicatas
         // e que apenas as associações definidas neste seeder permaneçam.
-        DB::table('assessment_area_questionnaire')->truncate();
+        DB::table('area_questionnaire')->truncate();
 
         // 1. Mapear Áreas para acesso rápido (código => id)
         // Isso é uma otimização: evita múltiplas consultas dentro do loop.
-        $areaIds = AssessmentArea::all()->pluck('id', 'code');
+        $areaIds = Area::all()->pluck('id', 'code');
         
         // 2. Obter o mapa de associações.
         $questionnaireToAreaMap = $this->getQuestionnaireToAreaMap();
@@ -43,7 +43,7 @@ class QuestionnaireAreaLinkerSeeder extends Seeder
             
             // Executa a Ligação usando o relacionamento belongsToMany.
             // O método sync() cuida da inserção na tabela pivô.
-            $questionnaire->assessmentAreas()->sync($areaIdsToAttach);
+            $questionnaire->areas()->sync($areaIdsToAttach);
 
             echo "Ligadas " . count($areaIdsToAttach) . " Áreas de Avaliação ao Questionário: {$questionnaireCode}\n";
         }

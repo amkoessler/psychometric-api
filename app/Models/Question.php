@@ -12,42 +12,42 @@ class Question extends Model
     use HasFactory;
 
     protected $fillable = [
-        'answer_id', 
-        'question_identifier',
-        'question_text',
+        'questionnaire_id', // para o relacionamento 1:N
+        "scale_code", 
+        'question_identifier', //
+        'question_text', //
         'display_order', 
+        'factor_id',
     ];
 
     
-    // --- RELACIONAMENTOS N:M ---
+    // --- RELACIONAMENTO N:M (MANTIDO ONDE FAZ SENTIDO) ---
 
     /**
-     * Relação N:M: Questão <-> Factor (Cálculo)
-     */
-    public function factors(): BelongsToMany
+    * Relação N:1: Cada Questão pertence a UM Fator.
+         */
+    public function factor(): BelongsTo
     {
-        return $this->belongsToMany(Factor::class, 'factor_question')
-                    ->withPivot(['weight', 'is_reverse_scored']); 
+        // Retorna o fator ao qual esta questão pertence.
+        return $this->belongsTo(Factor::class); 
+    }
+    
+    
+    // --- RELACIONAMENTOS 1:N ---
+
+    /**
+     *  Relação 1:N: Questão -> Questionário (Pertence a UM)
+     */
+    public function questionnaire(): BelongsTo
+    {
+        return $this->belongsTo(Questionnaire::class);
     }
     
     /**
-     * Relação N:M: Questão <-> Questionário (Conteúdo)
-     * A Tabela Pivô 'questionnaire_question' define a ordem específica no Teste.
+     * Relação 1:N: Questão -> Opcoes de Resposta (Opções de Resposta)
      */
-    public function questionnaires(): BelongsToMany
+    public function scale(): BelongsTo
     {
-        return $this->belongsToMany(Questionnaire::class, 'questionnaire_question')
-                    ->withPivot('display_order'); // <--- Ordem específica do Questionário
-    }
-    
-
-    // --- RELACIONAMENTO 1:N ---
-    
-    /**
-     * Relação 1:N: Questão -> Answer (Opções de Resposta)
-     */
-    public function answer(): BelongsTo
-    {
-        return $this->belongsTo(Answer::class);
+        return $this->belongsTo(ResponseOption::class);
     }
 }

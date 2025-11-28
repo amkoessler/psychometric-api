@@ -19,7 +19,7 @@ class ResponseOptionResource extends JsonResource
             // O texto que será exibido (Ex: 'Muito Frequentemente')
             'text' => $this->option_text,
             // O valor usado no cálculo do score (Ex: 6)
-            'score_value' => $this->score_value,
+            'score' => $this->score_value,
         ];
     }
 }   

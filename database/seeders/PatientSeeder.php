@@ -12,17 +12,67 @@ class PatientSeeder extends Seeder
      */
     public function run(): void
     {
-        // O método run() está limpo. Ele chama a função privada no final da classe.
-        $patients = $this->getStaticPatientData();
+        // NOVO: Inicializa contadores
+        $createdCount = 0;
+        $updatedCount = 0;
+        $errorCount = 0;
 
+        $patients = $this->getStaticPatientData();
+        $totalCount = count($patients);
+        $count = 0;
+
+        $this->command->info('✨ Iniciando o Seeder de Pacientes (PatientSeeder). Total de ' . count($patients) . ' registros.');
+        $this->command->newLine(); // Pula uma linha
+
+        // Loop principal
         foreach ($patients as $data) {
-            // Atualiza o registro com TODOS os campos se o 'patient_code' existir,
-            // ou cria um novo registro caso contrário.
-            Patient::updateOrCreate(
-                ['patient_code' => $data['patient_code']], // Condição de busca (chave única)
-                $data                                     // Dados para criar ou ATUALIZAR TODOS OS CAMPOS
-            );
+            
+            $patientCode = $data['patient_code'];
+            $fullName = $data['full_name'];
+
+            try {
+                // Tenta encontrar o paciente pelo código ou cria um novo
+                $patient = Patient::updateOrCreate(
+                    ['patient_code' => $patientCode], // Condição de busca (chave única)
+                    $data                               // Dados para criar ou ATUALIZAR
+                );
+
+                $count++;
+
+
+                // Verifica se foi criado (NOVO)
+                if ($patient->wasRecentlyCreated) {
+                    $this->command->info("[{$count}/{$totalCount}] ✅ CRIADO: Paciente #{$patientCode} - {$fullName}");
+                    $createdCount++;
+                } else {
+                    $this->command->comment("[{$count}/{$totalCount}] 🔄 ATUALIZADO: Paciente #{$patientCode} - {$fullName}");
+                    $updatedCount++;
+                }
+
+            } catch (\Throwable $e) {
+                // Loga qualquer erro durante a operação (NOVO)
+                $this->command->error("❌ ERRO ao processar paciente #{$patientCode} ({$fullName}). Detalhe: " . $e->getMessage());
+                $errorCount++;
+            }
         }
+        
+        $this->command->newLine(); // Pula uma linha
+        $this->command->line("--------------------------------------------------");
+        
+        // NOVO: Sumário Final
+        $this->command->info('📊 Sumário da Execução:');
+        
+        if ($createdCount > 0) {
+            $this->command->line("   - Novos Pacientes Criados: **{$createdCount}**");
+        }
+        if ($updatedCount > 0) {
+            $this->command->line("   - Pacientes Existentes Atualizados: **{$updatedCount}**");
+        }
+        if ($errorCount > 0) {
+            $this->command->warn("   - Pacientes com Erro: **{$errorCount}**");
+        }
+        
+        $this->command->info('PatientSeeder concluído.');
     }
 
     //---------------------------------------------------------

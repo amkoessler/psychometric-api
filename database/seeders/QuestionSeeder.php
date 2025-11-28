@@ -12,6 +12,7 @@ class QuestionSeeder extends Seeder
      * Cache para IDs de Questionários para evitar consultas repetidas.
      */
     private array $questionnaireIds = [];
+    private array $answerIds = []; // Cache para IDs da Tabela Answers (Escalas)
 
     /**
      * Run the database seeds.
@@ -23,6 +24,7 @@ class QuestionSeeder extends Seeder
         $currentQuestionnaireCode = null;
         $displayOrder = 1;
 
+        // **IMPORTANTE:** Este método deve retornar o seu array de dados estáticos completo.
         $allQuestions = $this->getStaticQuestionData();
 
         // 1. Itera sobre todas as perguntas
@@ -45,25 +47,29 @@ class QuestionSeeder extends Seeder
             $questionnaireId = $this->getQuestionnaireIdByCode($data['questionnaire_code']);
             
             if (!$questionnaireId) {
-                // Se o Questionário pai não existir, pule esta pergunta (melhoria de segurança)
+                // Se o Questionário pai não existir, pule esta pergunta
                 echo "    ⚠️ ATENÇÃO: Questionário '{$data['questionnaire_code']}' não encontrado. Pulo.\n";
                 continue;
             }
 
+            $scaleCode = $this->getScaleIdByCode($data['scale_code']);
+
             // 3. Prepara os dados para o Question Model
             $questionData = [
-                'questionnaire_id' => $questionnaireId,
+                // CORREÇÃO: ADICIONANDO O ID DO QUESTIONÁRIO AQUI
+                // A chave 'questionnaire_id' é essencial para o updateOrCreate funcionar.
+                'questionnaire_id'    => $questionnaireId,                 
                 'question_identifier' => $data['question_identifier'],
-                // display_order é sequencial dentro do questionário
-                'display_order' => $displayOrder++,
-                'question_text' => $data['question_text'],
-                'response_type' => $data['response_type'],
+                'display_order'       => $displayOrder++,
+                'question_text'       => $data['question_text'],
+                'scale_code'          => $scaleCode,
             ];
 
             // 4. Usa updateOrCreate para garantir a unicidade e atualização
+            // Agora, 'questionnaire_id' está definido corretamente no array de busca.
             Question::updateOrCreate(
                 [
-                    'questionnaire_id' => $questionData['questionnaire_id'],
+                    'questionnaire_id'    => $questionData['questionnaire_id'], 
                     'question_identifier' => $questionData['question_identifier'],
                 ],
                 $questionData
@@ -77,9 +83,30 @@ class QuestionSeeder extends Seeder
         echo "\n\n✅ **Resumo de Questões Inseridas/Atualizadas**:\n";
         echo "----------------------------------------------------\n";
         foreach ($logSummary as $code => $count) {
-            echo "   - [{$code}]: {$count} questões processadas.\n";
+            echo "  - [{$code}]: {$count} questões processadas.\n";
         }
         echo "----------------------------------------------------\n";
+    }
+
+    /**
+     * Busca o ID da Escala (Answer ID) a partir do código da escala (scale_code/response_type).
+     */
+    private function getScaleIdByCode(string $scaleCode): int
+    {
+        if (isset($this->answerIds[$scaleCode])) {
+            return $this->answerIds[$scaleCode];
+        }
+
+        // Certifique-se de que o modelo Answer está importado
+        // E que a tabela 'answers' tem uma coluna 'code'
+        $scaleId = \App\Models\ResponseOption::where('scale_code', $scaleCode)->value('id');
+
+        if (!$scaleId) {
+            throw new \Exception("Escala com código '{$scaleCode}' não encontrada na tabela Response_Options. Rode o ResponseOptionsSeeder primeiro!");
+        }
+
+        $this->answerIds[$scaleCode] = $scaleId;
+        return $scaleId;
     }
 
     /**
@@ -100,8 +127,6 @@ class QuestionSeeder extends Seeder
 
         return null;
     }
-
-
     private function getStaticQuestionData(): array
     {
         // -------------------------------------------------------------
@@ -585,7 +610,6 @@ class QuestionSeeder extends Seeder
                 'questionnaire_code' => $questionnaire_code, 
                 'question_identifier' => $q['question_identifier'], 
                 'question_text' => $q['text'],
-                'response_type' => $tipos_respostas[$questionnaire_code], 
                 'scale_code' => $q['scale_code'],
             ];
         }

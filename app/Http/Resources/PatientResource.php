@@ -12,16 +12,19 @@ class PatientResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        // Variável para a data formatada, garantindo que seja uma string
-        $birthDateString = $this->birth_date ? $this->birth_date->format('Y-m-d') : null;
+        // Se o cast 'date' estiver no Model, $this->birth_date já é um objeto Carbon ou null.
+        // Formatamos explicitamente para 'Y-m-d' (ISO 8601 Date).
+        $birthDateString = $this->birth_date?->format('Y-m-d');
 
         return [
-            // CAMPOS EXISTENTES
+            // DADOS PRIMÁRIOS E CHAVE
+            'id' => $this->id, // Adicionado a chave primária
             'patient_code' => $this->patient_code, 
             'full_name' => $this->full_name,
             
-            // Calculado a idade (Ainda requer Carbon)
-            'age' => $this->birth_date ? $this->birth_date->age : null,
+            // DADOS DE DATA/IDADE
+            // Calculado a idade (Requer objeto Carbon)
+            'age' => $this->birth_date?->age, 
             // Retornando a data de nascimento como STRING formatada
             'birth_date' => $birthDateString, 
             
@@ -37,7 +40,8 @@ class PatientResource extends JsonResource
 
             'birth_order' => $this->birth_order,
             'family_members' => $this->family_members,
-            'has_addiction' => (bool) $this->has_addiction,
+            // Não é necessário o (bool) se o cast 'boolean' estiver no Model
+            'has_addiction' => $this->has_addiction, 
             'addiction_details' => $this->addiction_details,
 
             'socioeconomic_level' => $this->socioeconomic_level,
@@ -46,8 +50,13 @@ class PatientResource extends JsonResource
             'referral_reason' => $this->referral_reason,
             'referred_by' => $this->referred_by,
 
-            // TIMESTAMPS
-            'registered_at' => $this->created_at->format('Y-m-d H:i:s'), 
+            // RELACIONAMENTOS (Opcional, mas útil para resources)
+            // 'sessions' => QuestionnaireSessionResource::collection($this->whenLoaded('sessions')),
+
+            // TIMESTAMPS - Usando ISO 8601 para APIs REST (Padrão internacional)
+            'registered_at' => $this->created_at?->toISOString(), 
+            // Opcional, incluir o updated_at também
+            'updated_at' => $this->updated_at?->toISOString(),
         ];
     }
 }

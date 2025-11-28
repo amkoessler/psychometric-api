@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory; 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany; 
 
 class Questionnaire extends Model
 {
@@ -18,34 +19,41 @@ class Questionnaire extends Model
         'is_active',
     ];
 
+    // --- RELACIONAMENTOS MESTRES N:M ---
+
     /**
      * Relação N:M: Questionário <-> Área
-     * Um Questionário possui muitas Áreas de Avaliação (Classificação Primária).
+     * Renomeado para 'areas' para bater com o Resource.
      */
     public function areas(): BelongsToMany 
     {
-        // Usa a classe e o nome da tabela pivô corrigidos
+        // Usa a classe e o nome da tabela pivô
         return $this->belongsToMany(Area::class, 'area_questionnaire');
     }
     
     /**
-     * Relação N:M: Questionário <-> Fator (FALTANTE)
-     * Um Questionário é composto por muitos Fatores (Estrutura do Teste).
-     * A pivô 'questionnaire_factor' guarda o peso do Fator no Teste.
+     * Relação N:M: Questionário <-> Fator
      */
     public function factors(): BelongsToMany
     {
         return $this->belongsToMany(Factor::class, 'questionnaire_factor');
     }
 
-
     /**
-     * Relação N:M: Questionário <-> Questão (Reutilização)
-     * Um Questionário tem muitas Questões, e uma Questão pode estar em múltiplos Questionários.
-     * Mudar de HasMany para BelongsToMany para permitir reutilização de itens.
+     * Relação N:M: Questionário <-> Questão
      */
-    public function questions(): BelongsToMany
+    public function questions(): HasMany
     {
-        return $this->belongsToMany(Question::class, 'questionnaire_question');
+        return $this->hasMany(Question::class)->orderBy('display_order');
+    }
+    
+    // --- RELACIONAMENTO TRANSACIONAL (NOVO) ---
+    
+    /**
+     * Relação 1:N: Um Questionário tem muitas Sessões de Preenchimento (Instâncias Transacionais).
+     */
+    public function sessions(): HasMany 
+    {
+        return $this->hasMany(QuestionnaireSession::class); 
     }
 }

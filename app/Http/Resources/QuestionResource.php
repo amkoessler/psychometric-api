@@ -20,10 +20,6 @@ class QuestionResource extends JsonResource
 
             // Conteúdo
             'text' => $this->question_text,
-            'response_type' => $this->response_type,
-            
-            'scale_code' => $this->scale_code,
-
             
             // Timestamps (opcional)
             'created_at' => $this->created_at,
