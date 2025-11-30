@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo; 
 
 class ResponseOption extends Model
 {
@@ -16,10 +17,16 @@ class ResponseOption extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'scale_code', 
+        'scale_id', 
         'option_text', 
         'score_value',
     ];
 
-    // O Model ResponseOption não precisa de relacionamentos diretos por enquanto.
+    /**
+     * Relação N:1: Uma Opção de Resposta pertence a uma Escala.
+     */
+    public function scale(): BelongsTo
+    {
+        return $this->belongsTo(Scale::class, 'scale_id');
+    }
 }
