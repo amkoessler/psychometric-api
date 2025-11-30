@@ -32,4 +32,9 @@ class Scale extends Model
     {
         return $this->hasMany(Question::class, 'scale_id');
     }
+
+    public function options(): HasMany
+    {
+        return $this->hasMany(ResponseOption::class);
+    }
 }

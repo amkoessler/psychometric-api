@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\AssessmentArea;
-use App\Http\Resources\AssessmentAreaResource; 
+use App\Models\Area;
+use App\Http\Resources\AreaResource; 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource; // Para retornar uma coleção simples
 
-class AssessmentAreaController extends Controller
+class AreaController extends Controller
 {
     /**
      * Retorna uma lista de todas as Áreas de Avaliação ativas.
@@ -16,7 +16,7 @@ class AssessmentAreaController extends Controller
     public function index(Request $request): JsonResource //  Recebe o Request "include"
     {
         // 1. Inicia a query com os filtros padrão
-        $query = AssessmentArea::where('is_active', true)
+        $query = Area::where('is_active', true)
                                 ->orderBy('code');
         
         // 2. Verifica se o parâmetro ?include=dimensions foi passado na URL
@@ -28,17 +28,17 @@ class AssessmentAreaController extends Controller
         // 3. Executa a query
         $areas = $query->get();
 
-        // 4. O Resource (AssessmentAreaResource) usará whenLoaded() e incluirá as dimensões
+        // 4. O Resource (AreaResource) usará whenLoaded() e incluirá as dimensões
         // somente se elas foram carregadas acima.
-        return AssessmentAreaResource::collection($areas);
+        return AreaResource::collection($areas);
     }
 
     /**
      * Sincroniza o conjunto de Dimensões (IDs) para uma Área de Avaliação específica.
      * @param Request $request
-     * @param int $id ID da AssessmentArea
+     * @param int $id ID da Area
      */
-    public function syncDimensions(Request $request, int $id): AssessmentAreaResource
+    public function syncDimensions(Request $request, int $id): AreaResource
     {
         // 1. Validação: Garante que dimension_ids seja um array de IDs existentes
         $request->validate([
@@ -47,7 +47,7 @@ class AssessmentAreaController extends Controller
         ]);
 
         // 2. Busca a Área
-        $area = AssessmentArea::findOrFail($id);
+        $area = Area::findOrFail($id);
 
         // 3. Sincronização: Usa o método sync() para atualizar a tabela pivô
         // O sync() remove as ligações que não estão na lista e adiciona as novas.
@@ -57,6 +57,6 @@ class AssessmentAreaController extends Controller
         $area->load('dimensions');
         
         // Usamos make() pois estamos retornando apenas um item (a área atualizada)
-        return AssessmentAreaResource::make($area);
+        return AreaResource::make($area);
     }
 }

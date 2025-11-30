@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PatientController; 
 use App\Http\Controllers\QuestionnaireController;
-use App\Http\Controllers\AssessmentAreaController;
+use App\Http\Controllers\AreaController;
 use App\Http\Controllers\DimensionController;
 use App\Http\Controllers\ResponseOptionController;
 
@@ -30,7 +30,7 @@ Route::get('questionnaires/code/{code}', [QuestionnaireController::class, 'showB
 // Rota para buscar todas as questões de um questionário (usando o código)
 Route::get('questions/code/{code}', [QuestionController::class, 'getQuestionsByQuestionnaireCode']);
 // Rota para Grandes Áreas de Avaliação
-Route::get('assessment-areas', [AssessmentAreaController::class, 'index']);
+Route::get('areas', [AreaController::class, 'index']);
 // Rota para Dimensões
 Route::get('dimensions', [DimensionController::class, 'index']);
 
@@ -53,4 +53,4 @@ Route::delete('response-options/{id}', [ResponseOptionController::class, 'destro
  ### P U T ####
 ##############
 // Rota de Escrita (PUT): Sincroniza dimensões para uma área específica
-Route::put('assessment-areas/{id}/dimensions', [AssessmentAreaController::class, 'syncDimensions']);
+Route::put('areas/{id}/dimensions', [AreaController::class, 'syncDimensions']);

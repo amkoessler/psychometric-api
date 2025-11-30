@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Question extends Model
 {
@@ -48,6 +49,18 @@ class Question extends Model
      */
     public function scale(): BelongsTo
     {
-        return $this->belongsTo(ResponseOption::class);
+        return $this->belongsTo(Scale::class, 'scale_id');
     }
+
+/**
+     * Relação 1:N: Questão -> Opcoes de Resposta
+     *
+     * Este é o relacionamento que a API espera ao usar ?include=options.
+     * Ele carrega as ResponseOptions que pertencem à Scale associada a esta Questão.
+     */
+    public function options(): HasMany
+    {
+        return $this->hasMany(ResponseOption::class, 'scale_id', 'scale_id');
+    }
+
 }

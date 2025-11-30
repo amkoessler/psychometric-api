@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Scale;
 use App\Models\ResponseOption;
 use App\Http\Resources\ResponseOptionResource;
 use App\Http\Requests\StoreResponseOptionRequest;
@@ -44,44 +45,49 @@ class ResponseOptionController extends Controller
      */
     public function listScales(Request $request)
     {
-        // 1. Verifica se o parâmetro 'include=options' foi solicitado.
+        // 1. Prepara a query base no Model Scale.
+        $query = Scale::query();
+        
+        // 2. Verifica se o parâmetro 'include=options' foi solicitado.
         $includeOptions = $request->query('include') === 'options';
 
-        // 2. Query Base: Busca códigos de escala distintos e suas contagens.
-        $scales = ResponseOption::select('scale_code')
-                                ->selectRaw('COUNT(id) as options_count')
-                                ->groupBy('scale_code')
-                                ->orderBy('scale_code', 'asc')
-                                ->get();
-
         if ($includeOptions) {
-            // Se solicitado, busca TODOS os detalhes das opções e agrupa.
-            $allOptions = ResponseOption::orderBy('score_value')
-                                        ->get()
-                                        ->groupBy('scale_code');
-            
-            // 3. Mapeia sobre a coleção de escalas para ANEXAR
-            // a lista de opções formatada.
-            $scales = $scales->map(function ($scale) use ($allOptions) {
-                $scaleCode = $scale->scale_code;
-                
-                // Converte o objeto Eloquent/DB em array
-                $data = $scale->toArray();
-                
-                if (isset($allOptions[$scaleCode])) {
-                    // Aplica o Resource Collection para formatar a lista de opções anexada
-                    $data['options'] = ResponseOptionResource::collection($allOptions[$scaleCode]);
-                } else {
-                    $data['options'] = []; 
-                }
-                
-                // Retorna o array com a chave 'options' incluída.
-                return $data;
-            });
+            // 3. Se solicitado, usa Eager Loading para carregar as opções de resposta.
+            //    Aplica um constraint para ordenar as opções pelo 'score_value'.
+            $query->with(['responseOptions' => function ($q) {
+                $q->orderBy('score_value', 'asc');
+            }]);
         }
 
-        // 4. Retorna o resultado final.
-        return JsonResource::make(['data' => $scales]);
+        // 4. Executa a query.
+        //    Ordena as escalas por código, o que é mais útil.
+        $scales = $query->orderBy('code', 'asc')->get();
+
+        if ($scales->isEmpty()) {
+            return response()->json([
+                'message' => 'Nenhuma escala encontrada.',
+            ], 404);
+        }
+
+        // 5. Mapeia o resultado final.
+        //    Como não temos um ScaleResource, vamos criar a saída na mão para fins de demonstração
+        //    e para manter a estrutura de saída similar à sua intenção.
+        return $scales->map(function (Scale $scale) use ($includeOptions) {
+            $data = [
+                'id' => $scale->id,
+                'code' => $scale->code,
+                'name' => $scale->name,
+                'description' => $scale->description,
+                'options_count' => $scale->responseOptions->count(), // Conta baseada no Eager Load (se carregado)
+            ];
+
+            if ($includeOptions) {
+                // Se as opções foram carregadas, anexa a coleção formatada pelo Resource.
+                $data['options'] = ResponseOptionResource::collection($scale->responseOptions);
+            }
+            
+            return $data;
+        });
     }
 
     /**
@@ -92,7 +98,18 @@ class ResponseOptionController extends Controller
     {
         $scaleCode = strtoupper($scaleCode);
 
-        $options = ResponseOption::where('scale_code', $scaleCode)
+        // 1. Busca  a Escala pelo código
+        $scale = Scale::where('code', $scaleCode)->first();
+
+        if (!$scale) {
+            return response()->json([
+                'message' => "Código de escala não encontrado: {$scaleCode}",
+            ], 404);
+        }
+
+        // 2. Use o ID da Scale para buscar as ResponseOptions relacionadas
+        //    A coluna de busca agora é 'scale_id'
+        $options = ResponseOption::where('scale_id', $scale->id)
                                  ->orderBy('score_value', 'asc')
                                  ->get();
 

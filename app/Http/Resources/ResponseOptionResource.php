@@ -15,7 +15,7 @@ class ResponseOptionResource extends JsonResource
         return [
             'id' => $this->id,
             // O código da escala (Ex: LIKERT_6_PONTOS_NORMAL)
-            'scale_code' => $this->scale->scale_code, 
+            'scale_code' => $this->scale->code, 
             // O texto que será exibido (Ex: 'Muito Frequentemente')
             'text' => $this->option_text,
             // O valor usado no cálculo do score (Ex: 6)

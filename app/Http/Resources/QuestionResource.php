@@ -23,6 +23,10 @@ class QuestionResource extends JsonResource
             
             // Timestamps (opcional)
             'created_at' => $this->created_at,
+            
+
+            'options' => ResponseOptionResource::collection($this->whenLoaded('options')),
+
         ];
     }
 }
