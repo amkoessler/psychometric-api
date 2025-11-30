@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             QuestionnaireSeeder::class,
             QuestionnaireAreaLinkerSeeder::class,
             QuestionSeeder::class,
+            DimensionFactorLinkerSeeder::class,
             
         ]);
     }

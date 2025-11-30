@@ -5,11 +5,45 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\QuestionResource;
 use App\Models\Questionnaire;
+use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 class QuestionController extends Controller
 {
+
+    /**
+     * Retorna uma questão específica pelo seu ID.
+     * Rota: GET /api/questions/{id}
+     */
+    public function show(int $id, Request $request): JsonResponse
+{
+        $relations = array_filter(explode(',', $request->query('include', '')));
+
+        // 1. Busca a Questão pelo ID
+        $query = Question::where('id', $id);
+
+        if (!empty($relations)) {
+            $query->with($relations);
+        }
+
+        // 2. Executa a busca (USANDO first() EM VEZ DE firstOrFail())
+        $question = $query->first(); 
+
+        // 3. Validação Explícita: Se a questão NÃO for encontrada
+        if (!$question) {
+            // Retorna um erro 404 com uma mensagem JSON clara
+            return response()->json([
+                'error' => true,
+                'message' => "Questão com ID '{$id}' não encontrada.",
+                'details' => 'Verifique se o ID está correto ou se a questão existe no banco de dados.'
+            ], 404); // <-- O status 404 é crucial
+        }
+        
+        // 4. Se a questão for encontrada, retorna formatada
+        return QuestionResource::make($question)->response();
+    }
+
     /**
      * Retorna todas as questões de um questionário específico, usando o código.
      * Rota: GET /api/questions/code/{code}

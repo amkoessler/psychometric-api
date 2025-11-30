@@ -8,6 +8,7 @@ use App\Http\Controllers\QuestionnaireController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\DimensionController;
 use App\Http\Controllers\ResponseOptionController;
+use App\Http\COntrollers\FactorController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -29,10 +30,16 @@ Route::apiResource('questionnaires', QuestionnaireController::class);
 Route::get('questionnaires/code/{code}', [QuestionnaireController::class, 'showByCode']);
 // Rota para buscar todas as questões de um questionário (usando o código)
 Route::get('questions/code/{code}', [QuestionController::class, 'getQuestionsByQuestionnaireCode']);
+// Rota para buscar uma questões pelo seu Id
+Route::get('questions/{id}', [QuestionController::class, 'show']);
 // Rota para Grandes Áreas de Avaliação
 Route::get('areas', [AreaController::class, 'index']);
 // Rota para Dimensões
 Route::get('dimensions', [DimensionController::class, 'index']);
+// Rotas para Fatores
+Route::get('factors', [FactorController::class, 'index']);
+// Rota para sincronizar dimensões a um fator específico
+Route::put('factors/{id}/dimensions', [FactorController::class, 'syncDimensions']);
 
   #######################
  ## Response Options ###

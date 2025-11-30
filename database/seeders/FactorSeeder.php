@@ -106,13 +106,17 @@ class FactorSeeder extends Seeder
     //---------------------------------------------------------
     
     /**
-     * Retorna o array de dados estáticos para os Fatores (12 itens).
+     * Retorna o array de dados estáticos para os Fatores (36 itens).
      */
     private function getStaticFactorData(): array
     {
         return [
+            // =============================================================
+            // FATORES ORIGINAIS (12)
+            // =============================================================
+            
             // --- Fatores Originais (4) ---
-            // [1/12] RE - Regulação Emocional
+            // [1/36] RE - Regulação Emocional
             [
                 'code' => 'RE',
                 'name' => 'Regulação Emocional',
@@ -120,15 +124,15 @@ class FactorSeeder extends Seeder
                 'is_active' => true,
                 'dimension_codes' => ['EST', 'ANX', 'DEP'], 
             ],
-            // [2/12] HI - Hiperatividade / Impulsividade
+            // [2/36] HI - Hiperatividade / Impulsividade (TDAH)
             [
                 'code' => 'HI',
-                'name' => 'Hiperatividade / Impulsividade',
+                'name' => 'Hiperatividade / Impulsividade (TDAH)',
                 'description' => 'Comportamentos de externalização relacionados à incapacidade de controlar movimentos e reações, associado ao TDAH.',
                 'is_active' => true,
                 'dimension_codes' => ['CEXT'], 
             ],
-            // [3/12] CA - Comportamento Adaptativo
+            // [3/36] CA - Comportamento Adaptativo
             [
                 'code' => 'CA',
                 'name' => 'Comportamento Adaptativo',
@@ -136,17 +140,17 @@ class FactorSeeder extends Seeder
                 'is_active' => true,
                 'dimension_codes' => ['CSC', 'EXT'], 
             ],
-            // [4/12] A - Atenção
+            // [4/36] A - Atenção
             [
                 'code' => 'A',
-                'name' => 'Atenção',
+                'name' => 'Atenção (Concentrada, Dividida, Alternada)',
                 'description' => 'Fator que abrange as diferentes facetas da função atencional: concentrada, dividida e alternada.',
                 'is_active' => true,
                 'dimension_codes' => ['AC', 'AD', 'AA'], 
             ],
 
-            // --- Fatores Cognitivos/Neuropsicológicos (4 Novos) ---
-            // [5/12] PENS - Flexibilidade de Pensamento
+            // --- Fatores Cognitivos/Neuropsicológicos (4) ---
+            // [5/36] PENS - Flexibilidade de Pensamento
             [
                 'code' => 'PENS',
                 'name' => 'Flexibilidade de Pensamento e Execução',
@@ -154,7 +158,7 @@ class FactorSeeder extends Seeder
                 'is_active' => true,
                 'dimension_codes' => ['FE', 'AA'], // Funções Executivas, Atenção Alternada
             ],
-            // [6/12] MEMR - Aprendizagem e Memória
+            // [6/36] MEMR - Aprendizagem e Memória
             [
                 'code' => 'MEMR',
                 'name' => 'Aprendizagem e Memória',
@@ -162,7 +166,7 @@ class FactorSeeder extends Seeder
                 'is_active' => true,
                 'dimension_codes' => ['MLP', 'MCP'], // Memória de Longo e Curto Prazo
             ],
-            // [7/12] RACV - Raciocínio Verbal Complexo
+            // [7/36] RACV - Raciocínio Verbal Complexo
             [
                 'code' => 'RACV',
                 'name' => 'Raciocínio Verbal Complexo',
@@ -170,7 +174,7 @@ class FactorSeeder extends Seeder
                 'is_active' => true,
                 'dimension_codes' => ['RV', 'FG'], // Raciocínio Verbal, Fator G
             ],
-            // [8/12] RAOB - Raciocínio Abstrato e Lógico
+            // [8/36] RAOB - Raciocínio Abstrato e Lógico
             [
                 'code' => 'RAOB',
                 'name' => 'Raciocínio Abstrato e Lógico',
@@ -179,8 +183,8 @@ class FactorSeeder extends Seeder
                 'dimension_codes' => ['RL', 'RA'], // Raciocínio Lógico, Raciocínio Abstrato
             ],
             
-            // --- Fatores de Personalidade/Clínicos/Vocacionais (4 Novos) ---
-            // [9/12] AVEC - Abertura e Valores
+            // --- Fatores de Personalidade/Clínicos/Vocacionais (4) ---
+            // [9/36] AVEC - Abertura e Valores
             [
                 'code' => 'AVEC',
                 'name' => 'Abertura à Experiência e Valores',
@@ -188,15 +192,15 @@ class FactorSeeder extends Seeder
                 'is_active' => true,
                 'dimension_codes' => ['OPN'], // Assumindo OPN como Abertura
             ],
-            // [10/12] AMAB - Amabilidade e Empatia
+            // [10/36] AMAB - Amabilidade e Empatia
             [
                 'code' => 'AMAB',
                 'name' => 'Amabilidade e Empatia',
                 'description' => 'Mede a orientação interpessoal, incluindo altruísmo, confiança, modéstia e preocupação com o bem-estar alheio (Big Five - Amabilidade).',
                 'is_active' => true,
-                'dimension_codes' => ['AE', 'AGR'], // Autoestima, Assumindo AGR como Amabilidade
+                'dimension_codes' => ['AE', 'AGR'], // Autoestima, Amabilidade
             ],
-            // [11/12] INTV - Interesses Vocacionais
+            // [11/36] INTV - Interesses Vocacionais
             [
                 'code' => 'INTV',
                 'name' => 'Interesses Vocacionais e Profissionais',
@@ -204,13 +208,221 @@ class FactorSeeder extends Seeder
                 'is_active' => true,
                 'dimension_codes' => ['REA', 'INV', 'SOC'], // Realista, Investigativo, Social (RIASEC)
             ],
-            // [12/12] SINT - Sintomas Clínicos Gerais
+            // [12/36] SINT - Sintomas Clínicos Gerais
             [
                 'code' => 'SINT',
                 'name' => 'Sintomas Clínicos Gerais (Afeto Negativo)',
                 'description' => 'Fator amplo que agrupa indicadores de sofrimento psicológico (distress), como sentimentos de ansiedade, depressão e somatização.',
                 'is_active' => true,
                 'dimension_codes' => ['DEP', 'ANX', 'EST'], // Depressão, Ansiedade, Estresse
+            ],
+
+            // =============================================================
+            // NOVOS FATORES (24 Novos)
+            // =============================================================
+
+            // --- NOVOS: BDI-II (1) ---
+            // [13/36] CAFET - Cognitivo/Afetivo (BDI-II)
+            [
+                'code' => 'CAFET',
+                'name' => 'Cognitivo/Afetivo',
+                'description' => 'Agrupamento de sintomas depressivos que refletem a visão negativa de si e do mundo (cognitivo) e a experiência de humor triste/perda de prazer (afetivo).',
+                'is_active' => true,
+                'dimension_codes' => ['DEP', 'EST'],
+            ],
+
+            // --- NOVOS: NEO-PI-R (2) ---
+            // [14/36] NEUR - Neuroticismo (Big Five)
+            [
+                'code' => 'NEUR',
+                'name' => 'Neuroticismo',
+                'description' => 'Tendência a experimentar estados emocionais desagradáveis, como raiva, ansiedade, depressão e vulnerabilidade psicológica.',
+                'is_active' => true,
+                'dimension_codes' => ['ANX', 'DEP', 'EST'],
+            ],
+            // [15/36] EXTV - Extroversão (Big Five)
+            [
+                'code' => 'EXTV',
+                'name' => 'Extroversão',
+                'description' => 'Qualidade e intensidade da interação interpessoal, nível de atividade, necessidade de estimulação e capacidade de alegria.',
+                'is_active' => true,
+                'dimension_codes' => ['EXT', 'SOC'],
+            ],
+
+            // --- NOVOS: RSES (1) ---
+            // [16/36] AETM - Autoestima
+            [
+                'code' => 'AETM',
+                'name' => 'Fator Único (Autoestima)',
+                'description' => 'Avaliação e sentimento de valor pessoal; uma atitude global de aceitação e aprovação de si mesmo. (Baseado na Escala de Rosenberg).',
+                'is_active' => true,
+                'dimension_codes' => ['AE'],
+            ],
+
+            // --- NOVOS: DFH-IV (2) ---
+            // [17/36] DHFM - Fator 1: Figura Masculina (Desenho da Figura Humana)
+            [
+                'code' => 'DHFM',
+                'name' => 'Fator 1: Figura Masculina (DFH)',
+                'description' => 'Medida do nível de desenvolvimento cognitivo refletido nos detalhes e proporções do desenho da figura humana masculina.',
+                'is_active' => true,
+                'dimension_codes' => ['FG'], // Ligado ao Fator G / Cognitivo
+            ],
+            // [18/36] DHFF - Fator 2: Figura Feminina (Desenho da Figura Humana)
+            [
+                'code' => 'DHFF',
+                'name' => 'Fator 2: Figura Feminina (DFH)',
+                'description' => 'Medida do nível de desenvolvimento cognitivo refletido nos detalhes e proporções do desenho da figura humana feminina.',
+                'is_active' => true,
+                'dimension_codes' => ['FG'], // Ligado ao Fator G / Cognitivo
+            ],
+
+            // --- NOVOS: PCL-5 (4) ---
+            // [19/36] INTRU - Sintomas de Intrusão (Cluster B)
+            [
+                'code' => 'INTRU',
+                'name' => 'Sintomas de Intrusão',
+                'description' => 'Sintomas de reexperiência traumática, como recordações angustiantes recorrentes, sonhos e reações dissociativas (flashbacks).',
+                'is_active' => true,
+                'dimension_codes' => ['EST', 'ANX'],
+            ],
+            // [20/36] EVIT - Evitação (Cluster C)
+            [
+                'code' => 'EVIT',
+                'name' => 'Evitação',
+                'description' => 'Esforços persistentes para evitar memórias, pensamentos, sentimentos ou lembretes externos relacionados ao trauma.',
+                'is_active' => true,
+                'dimension_codes' => ['ANX'],
+            ],
+            // [21/36] CHNEG - Cognições e Humor Negativo (Cluster D)
+            [
+                'code' => 'CHNEG',
+                'name' => 'Cognições e Humor Negativo',
+                'description' => 'Alterações negativas persistentes nas cognições e no humor, como crenças distorcidas sobre si/mundo e humor persistentemente negativo.',
+                'is_active' => true,
+                'dimension_codes' => ['DEP', 'EST'],
+            ],
+            // [22/36] HIPA - Hiperexcitação/Arousal (Cluster E)
+            [
+                'code' => 'HIPA',
+                'name' => 'Hiperexcitação/Arousal',
+                'description' => 'Alterações acentuadas na reatividade e excitação, incluindo irritabilidade, hipervigilância, problemas de concentração e sono.',
+                'is_active' => true,
+                'dimension_codes' => ['CEXT', 'EST'],
+            ],
+
+            // --- NOVOS: IFP-II (14 Necessidades) ---
+            // [23/36] AUTI - Autonomia/Independência
+            [
+                'code' => 'AUTI',
+                'name' => 'Autonomia/Independência',
+                'description' => 'Necessidade de agir de forma independente, fazer as próprias escolhas e evitar coerção, valorizando a liberdade pessoal.',
+                'is_active' => true,
+                'dimension_codes' => ['OPN', 'EXT'],
+            ],
+            // [24/36] REALZ - Realização (Abertura/Desempenho)
+            [
+                'code' => 'REALZ',
+                'name' => 'Realização (Abertura/Desempenho)',
+                'description' => 'Necessidade de superar obstáculos, atingir padrões elevados, ser bem-sucedido e competitivo em tarefas difíceis.',
+                'is_active' => true,
+                'dimension_codes' => ['NREAL', 'CSC'],
+            ],
+            // [25/36] AGRS - Agressão
+            [
+                'code' => 'AGRS',
+                'name' => 'Agressão',
+                'description' => 'Necessidade de atacar, culpar, criticar ou se vingar de outros; tendência a expressar hostilidade e desafiar a autoridade.',
+                'is_active' => true,
+                'dimension_codes' => ['CEXT'],
+            ],
+            // [26/36] SUBM - Submissão/Obediência
+            [
+                'code' => 'SUBM',
+                'name' => 'Submissão/Obediência',
+                'description' => 'Tendência a cooperar, buscar orientação, seguir regras e aceitar a liderança de pessoas respeitadas.',
+                'is_active' => true,
+                'dimension_codes' => ['AGR', 'CSC'],
+            ],
+            // [27/36] PERS - Persistência/Perseverança
+            [
+                'code' => 'PERS',
+                'name' => 'Persistência/Perseverança',
+                'description' => 'Tendência a trabalhar com afinco, concluir tarefas iniciadas e manter-se focado em objetivos difíceis, demonstrando tenacidade.',
+                'is_active' => true,
+                'dimension_codes' => ['CSC'],
+            ],
+            // [28/36] AFIL - Afiliação/Amizade
+            [
+                'code' => 'AFIL',
+                'name' => 'Afiliação/Amizade',
+                'description' => 'Necessidade de formar laços de amizade, ser leal e buscar intimidade social.',
+                'is_active' => true,
+                'dimension_codes' => ['NAFIL', 'EXT'],
+            ],
+            // [29/36] ORGZ - Ordem/Organização
+            [
+                'code' => 'ORGZ',
+                'name' => 'Ordem/Organização',
+                'description' => 'Necessidade de planejar, ser arrumado, metódico e manter as coisas limpas e organizadas.',
+                'is_active' => true,
+                'dimension_codes' => ['CSC'],
+            ],
+            // [30/36] EXPO - Exposição
+            [
+                'code' => 'EXPO',
+                'name' => 'Exposição',
+                'description' => 'Necessidade de ser notado, chamar a atenção, ser o centro das atenções, contar histórias e falar sobre seus sucessos.',
+                'is_active' => true,
+                'dimension_codes' => ['EXT'],
+            ],
+            // [31/36] ASST - Assistência/Apoio
+            [
+                'code' => 'ASST',
+                'name' => 'Assistência/Apoio (Receptivo)',
+                'description' => 'Necessidade de receber ajuda, simpatia, proteção e conforto de amigos ou figuras de autoridade em momentos de dificuldade.',
+                'is_active' => true,
+                'dimension_codes' => ['AGR'],
+            ],
+            // [32/36] INOV - Inovação/Mudança
+            [
+                'code' => 'INOV',
+                'name' => 'Inovação/Mudança',
+                'description' => 'Necessidade de buscar novidades, variar a rotina, viajar e experimentar coisas novas e diferentes.',
+                'is_active' => true,
+                'dimension_codes' => ['OPN'],
+            ],
+            // [33/36] DOMP - Dominância/Poder
+            [
+                'code' => 'DOMP',
+                'name' => 'Dominância/Poder',
+                'description' => 'Necessidade de controlar, influenciar, liderar e ser considerado uma autoridade; de dirigir os atos dos outros.',
+                'is_active' => true,
+                'dimension_codes' => ['EXT'],
+            ],
+            // [34/36] COMP - Compreensão/Conhecimento
+            [
+                'code' => 'COMP',
+                'name' => 'Compreensão/Conhecimento',
+                'description' => 'Necessidade de buscar conhecimento, analisar sentimentos/intenções (próprias e alheias) e entender fenômenos complexos.',
+                'is_active' => true,
+                'dimension_codes' => ['FG', 'RV'],
+            ],
+            // [35/36] CUID - Cuidado/Prestatividade
+            [
+                'code' => 'CUID',
+                'name' => 'Cuidado/Prestatividade (Doação)',
+                'description' => 'Necessidade de ajudar, proteger, ser gentil, prestar favores e demonstrar afeto e lealdade aos amigos e pessoas necessitadas.',
+                'is_active' => true,
+                'dimension_codes' => ['AGR'],
+            ],
+            // [36/36] RACS - Reação/Autoconservação
+            [
+                'code' => 'RACS',
+                'name' => 'Reação/Autoconservação',
+                'description' => 'Fator que envolve a tendência a reagir a críticas e a necessidade de evitar o perigo ou de buscar segurança.',
+                'is_active' => true,
+                'dimension_codes' => ['EST', 'AGR'],
             ],
         ];
     }

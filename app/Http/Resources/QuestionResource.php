@@ -26,6 +26,9 @@ class QuestionResource extends JsonResource
             
 
             'options' => ResponseOptionResource::collection($this->whenLoaded('options')),
+            'factor' => $this->whenLoaded('factor', function () {
+                    return new FactorResource($this->factor);
+            }),
 
         ];
     }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Factor extends Model
 {
@@ -38,14 +39,12 @@ class Factor extends Model
     }
 
     /**
-     * Relação N:M: Fator <-> Questão (CRUCIAL PARA O CÁLCULO)
-     * Um Fator agrupa muitas Questões, e uma Questão pode contribuir para múltiplos Fatores.
-     * A Tabela Pivô 'factor_question' guardará as regras de pontuação (peso, reversão) por item/fator.
+     * Relação 1:N: Fator -> Questão
+     * Um Fator possui muitas Questões, e CADA Questão pertence SOMENTE a este Fator.
      */
-    public function questions(): BelongsToMany
+    public function questions(): HasMany
     {
-        // Mudança para BelongsToMany para permitir que uma Questão pertença a múltiplos Fatores.
-        return $this->belongsToMany(Question::class, 'factor_question')
-                    ->withPivot(['weight', 'is_reverse_scored']); // Campos sugeridos para a Pivô
+        // O Laravel assume que a coluna 'factor_id' está na tabela 'questions'
+        return $this->hasMany(Question::class);
     }
 }
