@@ -26,7 +26,7 @@ class FactorController extends Controller
         }
 
         // 3. Executa a query
-        $factors = $query->get();
+        $factors = $query->orderBy('name','asc')->get();
 
         // 4. Retorna a coleção
         return FactorResource::collection($factors);
