@@ -23,7 +23,7 @@ class DimensionController extends Controller
 
         // 3. Aplica o filtro SOMENTE se o modo "all" não foi ativado.
         if (!$includeAll) {
-            $query->where('is_active', true); // <--- O FILTRO SÓ OCORRE AQUI!
+            $query->where('is_active', true); 
         }
         
         // 4. Busca as dimensões (ativas, ou todas se ?all=true)
