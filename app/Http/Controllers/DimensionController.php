@@ -27,7 +27,7 @@ class DimensionController extends Controller
         }
         
         // 4. Busca as dimensões (ativas, ou todas se ?all=true)
-        $dimensions = $query->get();
+        $dimensions = $query->orderBy('code','asc')->get();
 
         // 5. Retorna a coleção
         return DimensionResource::collection($dimensions); 
