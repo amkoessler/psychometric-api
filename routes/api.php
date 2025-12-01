@@ -8,7 +8,7 @@ use App\Http\Controllers\QuestionnaireController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\DimensionController;
 use App\Http\Controllers\ResponseOptionController;
-use App\Http\COntrollers\FactorController;
+use App\Http\Controllers\FactorController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
