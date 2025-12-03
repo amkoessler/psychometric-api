@@ -17,7 +17,7 @@ class FactorController extends Controller
     {
         // 1. Inicia a query com os filtros padrão: buscar apenas ativos e ordenar por código.
         $query = Factor::where('is_active', true)
-                        ->orderBy('code');
+                        ->orderBy('name', "asc");
         
         // 2. Verifica o parâmetro ?include=dimensions
         if ($request->query('include') === 'dimensions') {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Resources\QuestionnaireResource;
 use App\Models\Questionnaire;
+use Illuminate\Support\Facades\Log ;
 
 class QuestionnaireController extends Controller
 {
@@ -39,14 +40,15 @@ class QuestionnaireController extends Controller
     //  Busca um questionário específico com base no seu acrônimo/código.
     public function showByCode(string $code, Request $request)
     {
-        // 1. Garante que o código de busca está em MAIÚSCULAS
-        $code = strtoupper($code);
+        // // 1. Garante que o código de busca está em MAIÚSCULAS
+        // $code = strtoupper($code);
 
         // 2. Processa o parâmetro 'include' para carregamento dinâmico.
         $relations = array_filter(explode(',', $request->query('include', '')));
 
+        Log::info('O Codigo pesquisado é '. $code);
         // 3. Inicia e constrói a query:
-        $query = Questionnaire::where('code', $code); // <-- A condição WHERE vai aqui.
+        $query = Questionnaire::where('code', $code); 
         
         // 4. Aplica o carregamento dinâmico (Eager Loading).
         if (!empty($relations)) {

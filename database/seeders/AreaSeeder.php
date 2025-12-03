@@ -142,6 +142,22 @@ class AreaSeeder extends Seeder
                 'description' => 'Foca em traços de extroversão, habilidades interpessoais, comunicação e padrões comportamentais adaptativos.',
                 'is_active' => true,
             ],
+            // [9/8]Transtorno de Déficit de Atenção/Hiperatividade
+            [
+                'code' => 'TDAH',
+                'name' => 'Transtorno de Déficit de Atenção/Hiperatividade',
+                'description' => '🧠 Descrição da Área: TDAH
+O Transtorno de Déficit de Atenção/Hiperatividade (TDAH) é um transtorno do neurodesenvolvimento caracterizado por padrões persistentes de desatenção e/ou hiperatividade-impulsividade que têm impacto direto e negativo no funcionamento social, acadêmico ou profissional.
+
+Em resumo:
+
+Desatenção: Refere-se à dificuldade em manter o foco, seguir instruções detalhadas, organizar tarefas e evitar distrações.
+
+Hiperatividade/Impulsividade: Envolve excesso de atividade motora (inquietação, agitação) e/ou dificuldade em controlar respostas imediatas (agir sem pensar, interromper os outros).
+
+Esta área abrange instrumentos que avaliam a presença e a intensidade desses sintomas e o nível de prejuízo que causam em diversos contextos da vida do paciente.',
+                'is_active' => true,
+            ],
         ];
     }
 }

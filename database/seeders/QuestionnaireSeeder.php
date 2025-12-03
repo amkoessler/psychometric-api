@@ -188,10 +188,37 @@ class QuestionnaireSeeder extends Seeder
     ],
     // [18/XX] Escala de Transtorno do Déficit de Atenção e Hiperatividade (ETDAH-II)
     [
-        'code' => 'ETDAH-II',
+        'code' => 'ETDAH-II *',
         'title' => 'Escala de Transtorno do Déficit de Atenção e Hiperatividade (versão II)',
         'description' => 'Instrumento psicométrico para avaliação dos sintomas de TDAH em crianças e adolescentes. Avalia as dimensões de Desatenção, Hiperatividade/Impulsividade, Aspectos Emocionais e Autorregulação.',
         'edition' => 'Versão Atual', // Ajustar conforme o manual que você possui.
+        'is_active' => true, 
+    ],
+    [
+        'code' => 'ETDAH-Pais',
+        'title' => 'Escala de Avaliação de Comportamentos Infantojuvenis no TDAH em Ambiente Familiar',
+        'description' => '📝 Sobre o ETDAH-Pais
+Objetivo Principal
+O ETDAH-Pais (Escala de Avaliação de Comportamentos Infantojuvenis no TDAH em Ambiente Familiar - Versão para Pais) tem como objetivo coletar e organizar a percepção dos pais sobre a frequência de diversos comportamentos que podem estar envolvidos no quadro de TDAH.
+
+Características Chave
+Público-alvo: Pais de crianças e jovens, geralmente na faixa etária de 2 a 17 anos.
+
+Aplicação: É uma escala de classificação que os pais preenchem, indicando a frequência com que o comportamento ocorreu nos últimos seis meses (geralmente usando uma escala Likert, por exemplo, de 1 a 6).
+
+Contexto de Avaliação: Ele permite uma avaliação compreensiva e ampla do comportamento da criança ou adolescente, focando principalmente no ambiente familiar.
+
+Domínios Avaliados
+O teste avalia diversos domínios do comportamento, que vão além dos critérios básicos de atenção e hiperatividade/impulsividade do DSM-5, oferecendo uma visão mais completa, incluindo:
+
+Regulação Emocional: A capacidade de regular o comportamento e as emoções (como explosões de raiva, irritabilidade).
+
+Atenção: Dificuldade em manter o foco, distração, dificuldade em observar detalhes.
+
+Hiperatividade e Impulsividade: Inquietude, agitação, agir sem pensar.
+
+Comportamento Social e Opositor: Dificuldade em manter amizades, implicar com os outros, rebeldia e agressividade.',
+        'edition' => 'Versão Pais',
         'is_active' => true, 
     ],
     
