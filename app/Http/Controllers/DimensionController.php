@@ -21,6 +21,13 @@ class DimensionController extends Controller
         // 2. Verifica se o parâmetro 'all' foi passado (ex: ?all=true)
         $includeAll = filter_var($request->query('all'), FILTER_VALIDATE_BOOLEAN);
 
+        // 2. Verifica o parâmetro ?include=dimensions
+        if ($request->query('include') === 'factors') {
+            // Se sim, carrega as dimensões (Eager Loading)
+            $query->with('factors');
+        }
+
+
         // 3. Aplica o filtro SOMENTE se o modo "all" não foi ativado.
         if (!$includeAll) {
             $query->where('is_active', true); 

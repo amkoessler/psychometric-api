@@ -15,6 +15,8 @@ class DimensionResource extends JsonResource
             'name' => $this->name,
             'is_active' => $this->is_active,
             // Mantemos apenas os campos essenciais para o payload
+            'factors' => DimensionResource::collection($this->whenLoaded('factors')),
+
         ];
     }
 }
