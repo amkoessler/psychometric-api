@@ -54,9 +54,7 @@ class ResponseOptionController extends Controller
         if ($includeOptions) {
             // 3. Se solicitado, usa Eager Loading para carregar as opções de resposta.
             //    Aplica um constraint para ordenar as opções pelo 'score_value'.
-            $query->with(['responseOptions' => function ($q) {
-                $q->orderBy('score_value', 'asc');
-            }]);
+            $query->with(['responseOptions']);
         }
 
         // 4. Executa a query.
