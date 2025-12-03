@@ -6,6 +6,22 @@ use Illuminate\Http\Request;
 use App\Http\Resources\QuestionnaireResource;
 use App\Models\Questionnaire;
 use Illuminate\Support\Facades\Log ;
+// use Mews\Purifier\Facades\Purifier; // Importação necessária (será descomentada depois)
+
+
+// ====================================================================
+        // 🚨 LEMBRETE DE SEGURANÇA CRÍTICO: SANITIZAÇÃO DE HTML (WYSIWYG)
+        //
+        // O campo 'description' está sendo renderizado no frontend (React)
+        // via dangerouslySetInnerHTML. Isso torna a aplicação VULNERÁVEL a
+        // ataques XSS (Cross-Site Scripting) se o conteúdo vier de um editor
+        // WYSIWYG e não for limpo (sanitizado).
+        //
+        // A SOLUÇÃO CORRETA é instalar o 'HTML Purifier' e usá-lo AQUI.
+        //
+        // Exemplo (após instalar e importar o Purifier):
+        // $cleanDescription = Purifier::clean($request->input('description'));
+        // ====================================================================
 
 class QuestionnaireController extends Controller
 {

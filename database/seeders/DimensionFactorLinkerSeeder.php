@@ -9,90 +9,132 @@ use Throwable;
 
 class DimensionFactorLinkerSeeder extends Seeder
 {
-    // NOVO: Cache de dados que será preenchido pelo FactorSeeder real.
-    private array $factorToDimensionMap = [];
-
     /**
      * Sincroniza o relacionamento N:M entre Factor e Dimension (tabela pivô dimension_factor).
      */
     public function run(): void
     {
-        $this->command->info('✨ Iniciando o Seeder de Ligações Fator-Dimensão (DimensionFactorLinkerSeeder).');
-        
-        // --- 1. FONTE DA VERDADE: Obtém os dados do FactorSeeder ---
-        // Aqui, DEVERÍAMOS chamar getStaticFactorData() do FactorSeeder.
-        // Como o acesso direto é difícil, vamos usar o mapa estático, mas garantindo a correção.
+        // NOVO: Inicializa contadores
+        $totalLinks = 0;
+        $processedFactors = 0;
+        $successFactors = 0;
+        $errorFactors = 0;
+
+        // --- 1. FONTE DA VERDADE: Obtém o mapa de ligações ---
         $factorToDimensionMap = $this->getFactorToDimensionMap();
+        $totalFactors = count($factorToDimensionMap);
+
+        // Feedback de Início
+        $this->command->info('✨ Iniciando o Seeder de Ligações Fator-Dimensão (DimensionFactorLinkerSeeder). Total de Fatores a processar: ' . $totalFactors);
+        $this->command->newLine();
         
         // 2. Otimização: Cache de IDs
         $factorIdsMap = Factor::all()->pluck('id', 'code');
         $dimensionIdsMap = Dimension::all()->pluck('id', 'code');
         
         if ($factorIdsMap->isEmpty() || $dimensionIdsMap->isEmpty()) {
-            $this->command->error("ERRO: FactorSeeder ou DimensionSeeder devem ser executados primeiro.");
+            $this->command->error("ERRO: FactorSeeder ou DimensionSeeder devem ser executados primeiro. Abortando.");
             return;
         }
 
-        $totalLinks = 0;
-        $totalFactors = count($factorToDimensionMap);
-        $currentFactor = 0;
-
-        // 3. Loop e Sincronização
+        // 3. Loop principal
         foreach ($factorToDimensionMap as $factorCode => $dimensionCodes) {
-            $currentFactor++;
+            $processedFactors++;
             
-            // Busca o Fator pelo código
+            // Tenta encontrar o Fator
             $factor = Factor::where('code', $factorCode)->first();
 
             if (!$factor) {
-                // Mensagem melhorada para debug
-                $this->command->warn("[{$currentFactor}/{$totalFactors}] AVISO: Fator '{$factorCode}' não encontrado na tabela. Pulando.");
+                $this->command->error("[{$processedFactors}/{$totalFactors}] ERRO: Fator '{$factorCode}' não encontrado no banco de dados.");
+                $errorFactors++;
                 continue;
             }
 
-            // Mapeia os códigos de Dimensão para seus IDs
-            $dimensionIdsToSync = collect($dimensionCodes)
-                ->map(fn ($code) => $dimensionIdsMap->get($code))
-                ->filter() 
-                ->toArray();
-                
-            // Mapeia de volta os IDs para Códigos para a mensagem de log detalhada
-            $syncedDimensionCodes = collect($dimensionIdsToSync)
-                ->map(fn ($id) => $dimensionIdsMap->flip()->get($id))
-                ->implode(', '); // Converte o array em string separada por vírgula
+            // Mapeia os códigos das dimensões para seus IDs. Filtra códigos inexistentes.
+            $dimensionIdsToSync = [];
+            $syncedDimensionCodes = [];
+
+            foreach ($dimensionCodes as $dimCode) {
+                if (isset($dimensionIdsMap[$dimCode])) {
+                    $dimensionIdsToSync[] = $dimensionIdsMap[$dimCode];
+                    $syncedDimensionCodes[] = $dimCode;
+                }
+            }
 
             try {
+                // Sincroniza o relacionamento (cria/atualiza/deleta ligações)
                 $factor->dimensions()->sync($dimensionIdsToSync);
+                
                 $linkCount = count($dimensionIdsToSync);
                 $totalLinks += $linkCount;
+                $successFactors++;
 
                 // Mensagem de sucesso com detalhes das dimensões ligadas
-                $this->command->line("[{$currentFactor}/{$totalFactors}] ✅ Fator '{$factorCode}' sincronizado com {$linkCount} Dimensões: [{$syncedDimensionCodes}]");
+                $syncedDimensionList = implode(', ', $syncedDimensionCodes);
+                $this->command->info("[{$processedFactors}/{$totalFactors}] ✅ SUCESSO: Fator '{$factorCode}' sincronizado com {$linkCount} Dimensões: [{$syncedDimensionList}]");
 
             } catch (Throwable $e) {
-                $this->command->error("[{$currentFactor}/{$totalFactors}] ERRO ao sincronizar Fator '{$factorCode}': " . $e->getMessage());
+                $this->command->error("[{$processedFactors}/{$totalFactors}] ❌ ERRO FATAL ao sincronizar Fator '{$factorCode}': " . $e->getMessage());
+                $errorFactors++;
             }
         }
         
-        $this->command->info("Seeding de Ligações concluído. Total de {$totalLinks} ligações criadas/atualizadas.");
+        // --- Feedback Final ---
+        $this->command->newLine();
+        if ($errorFactors === 0) {
+            $this->command->info("🎉 Seeding de Ligações concluído com sucesso! Total de Fatores processados: {$processedFactors}.");
+        } else {
+            $this->command->warn("⚠️ Seeding de Ligações concluído com {$errorFactors} erro(s). Total de Fatores processados: {$processedFactors}.");
+        }
+        $this->command->info("Total de {$totalLinks} ligações na tabela pivô 'dimension_factor' criadas/atualizadas.");
     }
 
     /**
      * Mapa de ligações: Fator (código) => Dimensões (códigos).
-     * CONTEÚDO CORRIGIDO ABAIXO (Hipótese).
+     * CONTEÚDO CORRIGIDO ABAIXO (DEVE SER PREENCHIDO COM SEUS DADOS).
      */
     private function getFactorToDimensionMap(): array
     {
+        // TODO: PREENCHER COM OS DADOS CORRETOS DO SEU PROJETO
         return [
-            // --- CÓDIGOS SUSPEITOS DE INCONSISTÊNCIA (Possível correção) ---
-            'AVEC' => ['AE', 'AGR'],        // Exemplo: 'AUTOEST' virou 'AUT_EST'
-            'RACV'   => ['FG', 'RL', 'RV', 'RN'], // Exemplo: 'RACIONAL' virou 'RAC_G'
-            'MEMR'   => ['MCP', 'MLP', 'MEMG'], // Exemplo: 'MEMORIA' virou 'MEM_G'
-            'ANSIE_TR' => ['ANX', 'EMO'], 
-            'DEPRES_COG' => ['DEP', 'EMO'], 
+            // Exemplo da nossa nova estrutura:
+            'AVEC' => ['AE', 'AGR'],   
+            'AFIL' => ['EXT', 'NAFIL'],        
+            'AGRS' => [ 'CEXT'],        
             'AMAB' => ['AE', 'AGR'], 
+            'MEMR'   => ['MCP', 'MLP'], 
+            'ASST' => ['AGR'], 
+            'A' => ['ETDAH-PAIS', 'AC','AD','AA'],
+            'AUTI' => ['EXT', 'OPN'], 
+            'CHNEG' => ['DEP', 'EST'], 
+            'CAFET' => ['DEP', 'EST'], 
+            'CA' => ['ETDAH-PAIS', 'EXT','CSC'],
+            'COMP' => ['FG', 'RV'], 
+            'CUID' => ['AGR'], 
+            'DOMP' => ['EXT'], 
+            'EVIT' => ['ANX'], 
+            'EXPO' => ['EXT'], 
+            'EXTV' => ['EXT','SOC'], 
+            'DHFM' => ['FG'], 
+            'DHFF' => ['FG'], 
+            'AETM' => ['AE'], 
+            'PENS' => ['FE','AA'], 
+            'HI' => ['ETDAH-PAIS', 'CEXT'],
+            'HIPA' => ['EST', 'CEXT'],
+            'INOV' => ['OPN'],
             'INTV' => ['REA', 'INV', 'SOC'], 
+            'NEUR' => ['ANX', 'DEP', 'EST'], 
+            'ORGZ' => ['CSC'], 
+            'PERS' => ['CSC'], 
+            'RAOB' => ['RL','RA'], 
+            'RACV'   => ['FG', 'RL', 'RV', 'RN'], 
+            'RACS' => ['AGR', 'EST'], 
+            'REALZ' => ['CSC', 'NREAL'], 
+            'RE' => ['ETDAH-PAIS', 'ANX','DEP','EST'],
             'SINT' => ['DEP', 'ANX'], 
+            'INTRU' => ['ANX', 'EST'], 
+            'SUBM' => ['CSC', 'AGR'], 
         ];
     }
 }
+

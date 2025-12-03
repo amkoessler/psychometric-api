@@ -143,19 +143,34 @@ class AreaSeeder extends Seeder
                 'is_active' => true,
             ],
             // [9/8]Transtorno de Déficit de Atenção/Hiperatividade
+           // Dentro do seu seeder do Laravel
             [
                 'code' => 'TDAH',
                 'name' => 'Transtorno de Déficit de Atenção/Hiperatividade',
-                'description' => '🧠 Descrição da Área: TDAH
-O Transtorno de Déficit de Atenção/Hiperatividade (TDAH) é um transtorno do neurodesenvolvimento caracterizado por padrões persistentes de desatenção e/ou hiperatividade-impulsividade que têm impacto direto e negativo no funcionamento social, acadêmico ou profissional.
-
-Em resumo:
-
-Desatenção: Refere-se à dificuldade em manter o foco, seguir instruções detalhadas, organizar tarefas e evitar distrações.
-
-Hiperatividade/Impulsividade: Envolve excesso de atividade motora (inquietação, agitação) e/ou dificuldade em controlar respostas imediatas (agir sem pensar, interromper os outros).
-
-Esta área abrange instrumentos que avaliam a presença e a intensidade desses sintomas e o nível de prejuízo que causam em diversos contextos da vida do paciente.',
+                'description' => '
+                    <h3 style="color: #4338ca; border-bottom: 2px solid #e0e7ff; padding-bottom: 5px; margin-top: 0;">
+                        🧠 Descrição da Área: TDAH
+                    </h3>
+                    <p>
+                        O <strong>Transtorno de Déficit de Atenção/Hiperatividade (TDAH)</strong> é um transtorno do neurodesenvolvimento caracterizado por padrões persistentes de desatenção e/ou hiperatividade-impulsividade que têm impacto direto e negativo no funcionamento social, acadêmico ou profissional.
+                    </p>
+                    
+                    <h4 style="color: #1e3a8a; margin-top: 15px;">
+                        Principais Componentes do TDAH:
+                    </h4>
+                    <ul style="list-style-type: none; padding-left: 20px;">
+                        <li style="margin-bottom: 10px;">
+                            <strong style="color: #dc2626;">🔴 Desatenção:</strong> Refere-se à dificuldade em manter o foco, seguir instruções detalhadas, organizar tarefas e evitar distrações.
+                        </li>
+                        <li style="margin-bottom: 10px;">
+                            <strong style="color: #059669;">🟢 Hiperatividade/Impulsividade:</strong> Envolve excesso de atividade motora (inquietação, agitação) e/ou dificuldade em controlar respostas imediatas (agir sem pensar, interromper os outros).
+                        </li>
+                    </ul>
+                    
+                    <p>
+                        Esta área abrange instrumentos que avaliam a presença e a intensidade desses sintomas e o nível de prejuízo que causam em diversos contextos da vida do paciente.
+                    </p>
+                ',
                 'is_active' => true,
             ],
         ];

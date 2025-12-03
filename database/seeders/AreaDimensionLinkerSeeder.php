@@ -103,6 +103,9 @@ class AreaDimensionLinkerSeeder extends Seeder
             
             // SOC (Habilidades Sociais e Comportamento): Foco em traços interpessoais e conduta.
             'SOC' => ['EXT', 'AGR', 'NAFIL', 'CEXT', 'AE'],
+            
+            // TDAH - Transtorno de Déficit de Atenção/Hiperatividade
+            'TDAH' => ['ETDAH-PAIS'],
         ];
     }
 }

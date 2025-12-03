@@ -197,27 +197,35 @@ class QuestionnaireSeeder extends Seeder
     [
         'code' => 'ETDAH-Pais',
         'title' => 'Escala de Avaliação de Comportamentos Infantojuvenis no TDAH em Ambiente Familiar',
-        'description' => '📝 Sobre o ETDAH-Pais
-Objetivo Principal
-O ETDAH-Pais (Escala de Avaliação de Comportamentos Infantojuvenis no TDAH em Ambiente Familiar - Versão para Pais) tem como objetivo coletar e organizar a percepção dos pais sobre a frequência de diversos comportamentos que podem estar envolvidos no quadro de TDAH.
+        'description' => '<section>
+    <h2>📝 Sobre o ETDAH-Pais</h2>
+    
+    <p>O <strong>ETDAH-Pais</strong> (Escala de Avaliação de Comportamentos Infantojuvenis no TDAH em Ambiente Familiar - Versão para Pais) é um instrumento psicométrico focado na percepção dos responsáveis.</p>
 
-Características Chave
-Público-alvo: Pais de crianças e jovens, geralmente na faixa etária de 2 a 17 anos.
+    <h3>🎯 Objetivo Principal</h3>
+    <p>Coletar e organizar a percepção dos pais sobre a frequência de diversos comportamentos que podem estar envolvidos no quadro de <strong>Transtorno do Déficit de Atenção e Hiperatividade (TDAH)</strong>.</p>
 
-Aplicação: É uma escala de classificação que os pais preenchem, indicando a frequência com que o comportamento ocorreu nos últimos seis meses (geralmente usando uma escala Likert, por exemplo, de 1 a 6).
+    <hr>
 
-Contexto de Avaliação: Ele permite uma avaliação compreensiva e ampla do comportamento da criança ou adolescente, focando principalmente no ambiente familiar.
+    <h3>🔑 Características Chave</h3>
+    <ul>
+        <li><strong>Público-alvo:</strong> Pais de crianças e jovens, geralmente na faixa etária de <strong>2 a 17 anos</strong>.</li>
+        <li><strong>Aplicação:</strong> É uma escala de classificação preenchida pelos pais, indicando a frequência com que o comportamento ocorreu (geralmente usando uma escala Likert, de 1 a 6).</li>
+        <li><strong>Contexto de Avaliação:</strong> Permite uma avaliação compreensiva e ampla do comportamento da criança ou adolescente, focando no <strong>ambiente familiar</strong>.</li>
+    </ul>
 
-Domínios Avaliados
-O teste avalia diversos domínios do comportamento, que vão além dos critérios básicos de atenção e hiperatividade/impulsividade do DSM-5, oferecendo uma visão mais completa, incluindo:
+    <hr>
 
-Regulação Emocional: A capacidade de regular o comportamento e as emoções (como explosões de raiva, irritabilidade).
-
-Atenção: Dificuldade em manter o foco, distração, dificuldade em observar detalhes.
-
-Hiperatividade e Impulsividade: Inquietude, agitação, agir sem pensar.
-
-Comportamento Social e Opositor: Dificuldade em manter amizades, implicar com os outros, rebeldia e agressividade.',
+    <h3>🧠 Domínios Avaliados</h3>
+    <p>O teste avalia diversos domínios do comportamento, que vão além dos critérios básicos de atenção e hiperatividade/impulsividade do DSM-5, oferecendo uma visão mais completa:</p>
+    
+    <ol>
+        <li><strong>Regulação Emocional:</strong> A capacidade de regular o comportamento e as emoções (como explosões de raiva, irritabilidade).</li>
+        <li><strong>Atenção:</strong> Dificuldade em manter o foco, distração, dificuldade em observar detalhes.</li>
+        <li><strong>Hiperatividade e Impulsividade:</strong> Inquietude, agitação, agir sem pensar.</li>
+        <li><strong>Comportamento Social e Opositor:</strong> Dificuldade em manter amizades, implicar com os outros, rebeldia e agressividade.</li>
+    </ol>
+</section>',
         'edition' => 'Versão Pais',
         'is_active' => true, 
     ],

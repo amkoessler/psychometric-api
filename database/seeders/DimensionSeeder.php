@@ -251,6 +251,33 @@ class DimensionSeeder extends Seeder
                 'description' => 'Mede a frequência e intensidade dos comportamentos hiperativos, impulsivos e problemas de conduta que definem o quadro clínico do Transtorno do Déficit de Atenção e Hiperatividade.',
                 'is_active' => true, 
             ],
+            // Modelo de Seeder para a Dimensão ETDAH-PAIS
+
+            [
+                'code' => 'ETDAH-PAIS', 
+                'name' => 'Avaliação Comportamental TDAH (Versão Pais)',
+                'description' => '
+                    <h4 style="color: #6d28d9; border-bottom: 2px solid #ddd6fe; padding-bottom: 5px; margin-top: 0;">
+                        📝 Instrumento de Avaliação
+                    </h4>
+                    <p>
+                        O <strong>ETDAH-PAIS</strong> é um instrumento fundamental para avaliar o Transtorno do Déficit de Atenção e Hiperatividade (TDAH) através da perspectiva e experiência dos pais.
+                    </p>
+                    <p style="margin-top: 10px;">
+                        Sua pontuação se baseia em quatro fatores críticos para o diagnóstico:
+                    </p>
+                    <ul style="padding-left: 20px;">
+                        <li><strong style="color: #059669;">Regulação Emocional</strong></li>
+                        <li><strong style="color: #2563eb;">Hiperatividade / Impulsividade</strong></li>
+                        <li><strong style="color: #f59e0b;">Comportamento Adaptativo</strong></li>
+                        <li><strong style="color: #ef4444;">Atenção</strong></li>
+                    </ul>
+                    <p style="margin-top: 10px;">
+                        É uma ferramenta essencial para capturar a intensidade e a frequência dos sintomas no ambiente familiar.
+                    </p>
+                ',
+                'is_active' => true, 
+            ],
         ];
     }
 }
